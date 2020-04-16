@@ -4,4 +4,4 @@
 
 def matrix_transpose(matrix):
     """Computes the transpose of a 2D matrix"""
-    return list(zip(*matrix))
+    return list(map(list, zip(*matrix)))
