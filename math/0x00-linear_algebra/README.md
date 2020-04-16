@@ -68,7 +68,7 @@ What you should learn from this project:
 - Write a function `np_transpose(matrix)` that transposes matrix.
 
 
-### [12. Bracing The Elements](./ 12-bracin_the_elements.py)
+### [12. Bracing The Elements](./12-bracin_the_elements.py)
 - Write a function `np_elementwise(mat1, mat2)` that performs element-wise addition, subtraction, multiplication, and division.
 
 
