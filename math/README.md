@@ -1,1 +1,1 @@
-# Holberton School - Machine Learning
+# Math
