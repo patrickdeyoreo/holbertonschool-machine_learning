@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Provides a function to compute the transpose of a 2-dimensional matrix"""
-from typing import List
 
 
-def matrix_transpose(matrix: List) -> List:
+def matrix_transpose(matrix):
     """Computes the transpose of a 2D matrix"""
     transpose = []
     return transpose
