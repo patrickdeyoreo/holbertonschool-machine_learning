@@ -4,7 +4,6 @@
 
 def add_matrices2D(mat1, mat2):
     """Performs element-wise additon of two 2-dimensional matrices"""
-    """Concatenates two 2D matrices along the specified axis"""
     if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]):
         return [[a + b for a, b in zip(u, v)] for u, v in zip(mat1, mat2)]
     return None
