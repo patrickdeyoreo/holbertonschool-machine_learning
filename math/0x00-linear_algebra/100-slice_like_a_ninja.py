@@ -5,5 +5,6 @@ import numpy as np
 
 def np_slice(matrix, axes={}):
     """Slices a numpy.ndarray along specific axes"""
-    return matrix[tuple(slice(*axes.get(depth, (0, length)))
-                        for depth, length in enumerate(matrix.shape))]
+    part = [slice(*axes.get(depth, (None, None, None)))
+            for depth, length in enumerate(matrix.shape)]
+    return matrix[tuple(part)]
