@@ -9,18 +9,15 @@ def cat_matrices(mat1, mat2, axis=0):
     del shape1[axis]
     del shape2[axis]
     if shape1 == shape2:
-        mat1 = matrix_copy(mat1)
-        mat2 = matrix_copy(mat2)
+        return cat_matrices_comp(matrix_copy(mat1), matrix_copy(mat2), axis)
     return None
 
 
-def cat_matrices_map(mat1, mat2, axis=0):
-    """Recursive map wrapper to concatenate two n-dimensional matrices"""
-    if len(mat1) != len(mat2):
-        raise ValueError
-    if isinstance(mat1[0], list) and isinstance(mat2[0], list):
-        return list(map(add_matrices_map, mat1, mat2))
-    return [a + b for a, b in zip(mat1, mat2)]
+def cat_matrices_comp(mat1, mat2, axis):
+    """Recursive comprehension to concatenate two n-dimensional matrices"""
+    if axis != 0:
+        return [cat_matrices_comp(u, v, axis - 1) for u, v in zip(mat1, mat2)]
+    return mat1 + mat2
 
 
 def matrix_shape(matrix):
