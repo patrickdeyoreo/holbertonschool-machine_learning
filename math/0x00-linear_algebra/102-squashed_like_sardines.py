@@ -18,16 +18,16 @@ def cat_matrices_comp(mat1, mat2, axis):
     return matrix_copy(mat1 + mat2)
 
 
+def matrix_copy(matrix):
+    """Performs a deep copy of a matrix"""
+    if len(matrix) != 0 and isinstance(matrix[0], list):
+        return list(map(matrix_copy, matrix))
+    return matrix[:]
+
+
 def matrix_shape(matrix):
     """Computes the shape of a matrix"""
     shape = [len(matrix)]
     if len(matrix) != 0 and isinstance(matrix[0], list):
         shape += matrix_shape(matrix[0])
     return shape
-
-
-def matrix_copy(matrix):
-    """Perform a deep copy of a matrix"""
-    if len(matrix) != 0 and isinstance(matrix[0], list):
-        return list(map(matrix_copy, matrix))
-    return matrix[:]
