@@ -10,7 +10,7 @@ z = np.random.rand(2000) + 40 - np.sqrt(np.square(x) + np.square(y))
 
 gradient = 'summer'
 
-scm = plt.cm.ScalarMappable(cmap=plt.get_cmap('summer'))
+scm = plt.cm.ScalarMappable(cmap=plt.get_cmap(gradient))
 scm.set_clim([0, z.max()])
 
 fig, axs = plt.subplots()
