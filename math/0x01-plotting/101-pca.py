@@ -19,6 +19,7 @@ axs = fig.add_subplot(111, projection='3d')
 axs.set_xlabel('U1')
 axs.set_ylabel('U2')
 axs.set_zlabel('U3')
-axs.scatter(pca_data[:, 0], pca_data[:, 1], pca_data[:, 2], c=labels)
+axs.scatter(pca_data[:, 0], pca_data[:, 1], pca_data[:, 2], c=labels,
+            cmap=plt.cm.get_cmap('plasma'))
 
 plt.show()
