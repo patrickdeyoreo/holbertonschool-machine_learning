@@ -31,6 +31,15 @@ What you should learn from this project:
 ### [5. All in One](./5-all_in_one.py)
 - Complete the provided source code.
 
+### [6. Stacking Bars](./6-bars.py)
+- Complete the provided source code.
+
+### [7. Gradient](./100-gradient.py)
+- Complete the provided source code.
+
+### [7. PCA](./101-pca.py)
+- Complete the provided source code.
+
 ---
 
 ## Author
