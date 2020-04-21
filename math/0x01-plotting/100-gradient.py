@@ -10,16 +10,13 @@ z = np.random.rand(2000) + 40 - np.sqrt(np.square(x) + np.square(y))
 
 gradient = 'summer'
 
-fig, axs = plt.subplots()
-fig.suptitle("Mountain Elevation")
+plt.title("Mountain Elevation")
 
-scm = plt.cm.ScalarMappable(cmap=plt.get_cmap(gradient))
-scm.set_clim([0, z.max()])
+cmap = plt.get_cmap(gradient)
 
-fig.colorbar(scm, label="elevation (m)")
-
-axs.scatter(x, y, c=z, cmap=scm.get_cmap())
-axs.set_xlabel("x coordinate (m)")
-axs.set_ylabel("y coordinate (m)")
+sca = plt.scatter(x, y, c=z, vmin=0, vmax=z.max(), cmap=cmap)
+plt.colorbar(sca, label="elevation (m)")
+plt.xlabel("x coordinate (m)")
+plt.ylabel("y coordinate (m)")
 
 plt.show()
