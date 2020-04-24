@@ -6,11 +6,8 @@ def poly_derivative(poly):
     """Calculates the derivative of a polynomial"""
     try:
         _, *tail = poly
+        if tail and any(tail):
+            return [power * coeff for power, coeff in enumerate(tail, 1)]
     except (TypeError, ValueError):
         return None
-    if not tail or not any(tail):
-        return [0]
-    try:
-        return [power * coeff for power, coeff in enumerate(tail, 1)]
-    except (TypeError, ValueError):
-        return None
+    return [0]
