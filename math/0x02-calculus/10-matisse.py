@@ -4,6 +4,13 @@
 
 def poly_derivative(poly):
     """Calculates the derivative of a polynomial"""
-    if isinstance(poly, list) and all(isinstance(item, int) for item in poly):
-        return [power * coeff for power, coeff in enumerate(poly)][1:]
-    return None
+    try:
+        _, *tail = poly
+    except (TypeError, ValueError):
+        return None
+    if not tail or not any(tail):
+        return [0]
+    try:
+        return [power * coeff for power, coeff in enumerate(tail, 1)]
+    except (TypeError, ValueError):
+        return None
