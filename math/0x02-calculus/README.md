@@ -63,7 +63,7 @@
 
 ### [9. Our life is the sum total of all the decisions we make every day, and those decisions are determined by our priorities](./9-sum_total.py)
 
-- Write a function def `summation_i_squared(n)` that calculates the sum from `1` to `n` of `i^2`
+- Write a function `summation_i_squared(n)` that calculates the sum from `1` to `n` of `i^2`
 - `n` is the stopping condition
 - Return the integer value of the sum
 - If `n` is not a valid number, return `None`
@@ -72,14 +72,13 @@
 
 ### [10. Derive happiness in oneself from a good day's work](./10-matisse.py)
 
-- Write a function `poly_derivative(poly)` that calculates the derivative of a polynomial
+- Write a function `poly_derivative(poly)` that calculates the derivative of a polynomial.
 - `poly` is a list of coefficients representing a polynomial:
   * The index of the list represents the power of `x` to which the coefficient belongs.
-  * Example: If `f(x) = x^3 + 3x +5` then poly is equal to `[5, 3, 0, 1]`.
+  * Example: If `f(x) = x^3 + 3x + 5` then poly is equal to `[5, 3, 0, 1]`.
 - If `poly` is not valid, return `None`.
 - If the derivative is `0`, return `[0]`.
 - Otherwise return a new list of coefficients representing the derivative of the polynomial.
-
 
 
 ### [11. The Western Exchange](./11-the_western_exchange.py)
@@ -103,12 +102,21 @@
 
 
 ### [16. The Whole Barn](./101-the_whole_barn.py)
+
 - Write a function `add_matrices(mat1, mat2)` that adds two matrices.
 
 
-### [17. Squashed Like Sardines](./102-squashed_like_sardines.py)
-- Write a function `cat_matrices(mat1, mat2, axis=0)` that concatenates two matrices along a specific axis.
+### [17. Integrate](./17-integrate.py)
 
+- Write a function `poly_integral(poly, C=0)` that calculates the integral of a polynomial.
+- `poly` is a list of coefficients representing a polynomial:
+  * The index of the list represents the power of `x` to which the coefficient belongs.
+  * Example: If `f(x) = x^3 + 3x + 5` then poly is equal to `[5, 3, 0, 1]`.
+- `C` is an integer representing the integration constant.
+- If a coefficient is a whole number, it should be represented as an integer.
+- If `poly` or `C` is not valid, return `None`.
+- Otherwise return a new list of coefficients representing the integral of the polynomial.
+- The returned list should be as small as possible.
 ---
 
 ## Author
