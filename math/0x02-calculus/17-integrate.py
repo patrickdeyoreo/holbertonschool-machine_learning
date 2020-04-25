@@ -5,8 +5,7 @@
 def poly_integral(poly, C=0):
     """Calculates the integral of a polynomial"""
     try:
-        if C % 1 == 0:
-            C = int(C)
+        C = float(C) if C % 1 else int(C)
         integral = poly[:]
         while integral[-1] == 0:
             integral.pop()
