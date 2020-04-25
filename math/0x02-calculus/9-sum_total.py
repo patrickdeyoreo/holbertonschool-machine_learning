@@ -4,7 +4,6 @@
 
 def summation_i_squared(n):
     """Calculates the summation of i^2 from i=1 to n"""
-    try:
+    if isinstance(n, int):
         return sum(map(lambda i: i ** 2, range(1, n + 1)))
-    except (TypeError, ValueError):
-        return None
+    return None
