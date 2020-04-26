@@ -74,50 +74,57 @@
 
 - Write a function `poly_derivative(poly)` that calculates the derivative of a polynomial.
 - `poly` is a list of coefficients representing a polynomial:
-  * The index of the list represents the power of `x` to which the coefficient belongs.
-  * Example: If `f(x) = x^3 + 3x + 5` then poly is equal to `[5, 3, 0, 1]`.
+  - The index of the list represents the power of `x` to which the coefficient belongs.
+  - Example: If `f(x) = x^3 + 3x + 5` then poly is equal to `[5, 3, 0, 1]`.
 - If `poly` is not valid, return `None`.
 - If the derivative is `0`, return `[0]`.
 - Otherwise return a new list of coefficients representing the derivative of the polynomial.
 
 
-### [11. The Western Exchange](./11-the_western_exchange.py)
-- Write a function `np_transpose(matrix)` that transposes matrix.
+### [11. Good grooming is integral and impeccable style is a must](./11-integral)
+
+- Evaluate the provided integral (multiple choice)
 
 
-### [12. Bracing The Elements](./12-bracin_the_elements.py)
-- Write a function `np_elementwise(mat1, mat2)` that performs element-wise addition, subtraction, multiplication, and division.
+### [12. We are all an integral part of the web of life](./12-integral)
+
+- Evaluate the provided integral (multiple choice)
 
 
-### [13. Cat's Got Your Tongue](./13-cats_got_your_tongue.py)
-- Write a function `np_cat(mat1, mat2, axis=0)` that concatenates two matrices along a specific axis.
+### [13. Create a definite plan for carrying out your desire and begin at once](./13-definite)
+
+- Evaluate the provided integral (multiple choice)
 
 
-### [14. Saddle Up](./14-saddle_up.py)
-- Write a function `np_matmul(mat1, mat2)` that performs matrix multiplication.
+### [14. My talents fall within definite limitations](./14-definite)
+
+- Evaluate the provided integral (multiple choice)
 
 
-### [15. Slice Like A Ninja](./100-slice_like_a_ninja.py)
-- Write a function `np_slice(matrix, axes={})` that slices a matrix along a specific axes.
+### [15. Winners are people with definite purpose in life](./15-definite)
+
+- Evaluate the provided integral (multiple choice)
 
 
-### [16. The Whole Barn](./101-the_whole_barn.py)
+### [16. Double whammy](./16-double)
 
-- Write a function `add_matrices(mat1, mat2)` that adds two matrices.
+- Evaluate the provided integral (multiple choice)
 
 
 ### [17. Integrate](./17-integrate.py)
 
 - Write a function `poly_integral(poly, C=0)` that calculates the integral of a polynomial.
 - `poly` is a list of coefficients representing a polynomial:
-  * The index of the list represents the power of `x` to which the coefficient belongs.
-  * Example: If `f(x) = x^3 + 3x + 5` then poly is equal to `[5, 3, 0, 1]`.
+  - The index of the list represents the power of `x` to which the coefficient belongs.
+  - Example: If `f(x) = x^3 + 3x + 5` then poly is equal to `[5, 3, 0, 1]`.
 - `C` is an integer representing the integration constant.
 - If a coefficient is a whole number, it should be represented as an integer.
 - If `poly` or `C` is not valid, return `None`.
 - Otherwise return a new list of coefficients representing the integral of the polynomial.
 - The returned list should be as small as possible.
+
 ---
 
 ## Author
-* [**Patrick DeYoreo**](github.com/patrickdeyoreo)
+
+[**Patrick DeYoreo**](github.com/patrickdeyoreo)

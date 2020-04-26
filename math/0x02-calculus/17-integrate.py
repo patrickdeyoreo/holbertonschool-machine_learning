@@ -5,13 +5,12 @@
 def poly_integral(poly, C=0):
     """Calculates the integral of a polynomial"""
     try:
-        C = float(C) if C % 1 else int(C)
         integral = poly[:]
         while integral[-1] == 0:
             integral.pop()
         integral = [coeff / power if coeff / power % 1 else coeff // power
                     for power, coeff in enumerate(integral, 1)]
-        integral.insert(0, C)
+        integral.insert(0, float(C) if C % 1 else int(C))
         return integral
     except IndexError:
         return None if len(poly) == 0 else [C]
