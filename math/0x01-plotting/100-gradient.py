@@ -11,10 +11,7 @@ z = np.random.rand(2000) + 40 - np.sqrt(np.square(x) + np.square(y))
 gradient = 'summer'
 
 plt.title("Mountain Elevation")
-
-cmap = plt.get_cmap(gradient)
-
-sca = plt.scatter(x, y, c=z, vmin=0, vmax=z.max(), cmap=cmap)
+sca = plt.scatter(x, y, c=z, vmin=0, vmax=z.max(), cmap=plt.get_cmap(gradient))
 plt.colorbar(sca, label="elevation (m)")
 plt.xlabel("x coordinate (m)")
 plt.ylabel("y coordinate (m)")
