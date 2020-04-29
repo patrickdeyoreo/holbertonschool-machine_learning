@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Provides a class ``Normal'' to represent an normal distribution"""
+
+
+class Normal:
+    """Represents an normal distribution"""
+
+    _pi = 3.1415926536
+    _e = 2.7182818285
+
+    def __init__(self, data=None, mean=0., stddev=1.0):
+        """
+        Initializes a normal distribution
+        Arguments:
+            data: the data to be used to estimate the distribution
+            lambtha: expected number of occurences in a given time frame
+        """
+        self.mean = mean
+        self.stddev = stddev
+        self.data = data
+
+    @property
+    def data(self):
+        """
+        Gets the data of a normal distribution
+        Return:
+            data
+        """
+        return self.__data
+
+    @data.setter
+    def data(self, value):
+        """
+        Sets the data of a normal distribution
+        Arguments:
+            value: a list containing at least two data points (or None)
+        """
+        if value is None:
+            self.__data = None
+        elif not isinstance(value, list):
+            raise TypeError("data must be a list")
+        elif len(value) < 2:
+            raise ValueError("data must contain multiple values")
+        else:
+            self.__data = value[:]
+            self.__mean = sum(value) / len(value)
+            sum_squares = sum((x - self.mean) ** 2 for x in self.data)
+            self.__stddev = (sum_squares / (len(value))) ** 0.5
+
+    @property
+    def mean(self):
+        """
+        Gets the mean of an normal distribution
+        Return:
+            mean
+        """
+        return self.__mean
+
+    @mean.setter
+    def mean(self, value):
+        """
+        Sets the mean of an normal distribution
+        Arguments:
+            value: a number
+        """
+        if getattr(self, 'data', None) is not None:
+            raise ValueError("cannot change mean unless data is None")
+        self.__mean = float(value)
+
+    @property
+    def stddev(self):
+        """
+        Gets the stddev of an normal distribution
+        Return:
+            stddev
+        """
+        return self.__stddev
+
+    @stddev.setter
+    def stddev(self, value):
+        """
+        Sets the stddev of an normal distribution
+        Arguments:
+            value: a positive number
+        """
+        if getattr(self, 'data', None) is not None:
+            raise ValueError("cannot change stddev unless data is None")
+        if value < 0:
+            raise ValueError("stddev must be a positive value")
+        self.__stddev = float(value)
