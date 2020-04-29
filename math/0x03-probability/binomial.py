@@ -88,7 +88,7 @@ class Binomial:
         """
         Gets the probability of a “success" of a binomial distribution
         Return:
-            stddev
+            p
         """
         return self.__p
 
@@ -97,11 +97,11 @@ class Binomial:
         """
         Sets the probability of a “success" of a binomial distribution
         Arguments:
-            value: a probability
+            value: a probability (0 < value < 1)
         """
         if getattr(self, 'data', None) is not None:
             raise ValueError("cannot change p unless data is None")
-        if 0 <= value <= 1 is False:
+        if 0 < value < 1 is False:
             raise ValueError("p must be greater than 0 and less than 1")
         self.__p = float(value)
 
