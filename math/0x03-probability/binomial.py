@@ -105,38 +105,43 @@ class Binomial:
             raise ValueError("p must be greater than 0 and less than 1")
         self.__p = float(value)
 
-    # def pmf(self, k):   # pylint: disable=invalid-name
-    #     """
-    #     Calculates the value of the PMF for a given number of “successes”
-    #     Arguments:
-    #         k: the number of successes
-    #     Return:
-    #         If k is out of range, return 0.
-    #         Otherwise, return the PMF value for k.
-    #     """
-    #     k = int(k)
-    #     if k < 0:
-    #         return 0
-    #     fac = 1
-    #     for num in range(k + 1):
-    #         fac *= num or 1
-    #     return self._e ** -self.lambtha * self.lambtha ** num / fac
+    def pmf(self, k):   # pylint: disable=invalid-name
+        """
+        Calculates the value of the PMF for a given number of “successes”
+        Arguments:
+            k: the number of successes
+        Return:
+            If k is out of range, return 0.
+            Otherwise, return the PMF value for k.
+        """
+        k = int(k)
+        if not 0 <= k <= self.n:
+            return 0
+        fac = num = 1
+        while num < min(k, self.n - k):
+            num += 1
+            fac *= num
+        denom = fac
+        while num < max(k, self.n - k):
+            num += 1
+            fac *= num
+        denom *= fac
+        while num < self.n:
+            num += 1
+            fac *= num
+        numer = fac
+        return numer/denom * self.p ** k * (1 - self.p) ** (self.n - k)
 
-    # def cdf(self, k):   # pylint: disable=invalid-name
-    #     """
-    #     Calculates the value of the CDF for a given number of “successes”
-    #     Arguments:
-    #         k: the number of successes
-    #     Return:
-    #         If k is out of range, return 0.
-    #         Otherwise, return the CDF value for k.
-    #     """
-    #     k = int(k)
-    #     if k < 0:
-    #         return 0
-    #     cdf = 0
-    #     fac = 1
-    #     for num in range(k + 1):
-    #         fac *= num or 1
-    #         cdf += self._e ** -self.lambtha * self.lambtha ** num / fac
-    #     return cdf
+    def cdf(self, k):   # pylint: disable=invalid-name
+        """
+        Calculates the value of the CDF for a given number of “successes”
+        Arguments:
+            k: the number of successes
+        Return:
+            If k is out of range, return 0.
+            Otherwise, return the CDF value for k.
+        """
+        k = int(k)
+        if not 0 <= k <= self.n:
+            return 0
+        return sum(self.pmf(x) for x in range(k + 1))
