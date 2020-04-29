@@ -60,7 +60,6 @@ class Binomial:
             self.__p = 1 - variance / mean
             self.__n = round(mean / self.p)
             self.__p = sum(x / self.n for x in self.data) / len(self.data)
-            p = 1 - variance / mean
 
     @property
     def n(self):     # pylint: disable=invalid-name
