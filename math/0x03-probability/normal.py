@@ -20,9 +20,12 @@ class Normal:
             data: the data to be used to estimate the distribution
             lambtha: expected number of occurences in a given time frame
         """
-        self.mean = mean
-        self.stddev = stddev
-        self.data = data
+        if data is None:
+            self.data = None
+            self.mean = mean
+            self.stddev = stddev
+        else:
+            self.data = data
 
     @property
     def data(self):

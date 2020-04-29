@@ -14,8 +14,11 @@ class Exponential:
             data: the data to be used to estimate the distribution
             lambtha: expected number of occurences in a given time frame
         """
-        self.lambtha = lambtha
-        self.data = data
+        if data is None:
+            self.data = None
+            self.lambtha = lambtha
+        else:
+            self.data = data
 
     @property
     def data(self):
