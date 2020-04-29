@@ -88,3 +88,23 @@ class Normal:
         if value < 0:
             raise ValueError("stddev must be a positive value")
         self.__stddev = float(value)
+
+    def z_score(self, x):   # pylint: disable=invalid-name
+        """
+        Calculates the z-score of a given x-value
+        Arguments:
+            x: the x-value
+        Return:
+            the z-score of x
+        """
+        return (x - self.mean) / self.stddev
+
+    def x_value(self, z):   # pylint: disable=invalid-name
+        """
+        Calculates the x-value of a given z-score
+        Arguments:
+            z: the z-score
+        Return:
+            the x-value of z
+        """
+        return z * self.stddev + self.mean

@@ -116,6 +116,21 @@ Create a class `Normal` that represents a normal distribution:
     - If `data` is not a `list`, raise a `TypeError` with the message `data must be a list`
     - If `data` does not contain at least two data points, raise a `ValueError` with the message `data must contain multiple values`
 
+
+### [7. Normalize Normal](./normal.py)
+
+Update the class `Normal`:
+
+- Instance method `z_score(self, x)`:
+  - Calculates the z-score of a given x-value
+  - `x` is the x-value
+  - Returns the z-score of `x`
+
+- Instance method def `x_value(self, z)`:
+  - Calculates the x-value of a given z-score
+  - `z` is the z-score
+  - Returns the x-value of `z`
+
 ---
 
 ## Author
