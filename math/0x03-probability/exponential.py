@@ -78,7 +78,7 @@ class Exponential:
             Otherwise, return the PDF value for x.
         """
         x = int(x)
-        if x < 0:
+        if x <= 0:
             return 0
         return self.lambtha * self._e ** (-self.lambtha * x)
 
@@ -92,6 +92,6 @@ class Exponential:
             Otherwise, return the CDF value for x.
         """
         x = int(x)
-        if x < 0:
+        if x <= 0:
             return 0
         return 1 - self._e ** (-self.lambtha * x)
