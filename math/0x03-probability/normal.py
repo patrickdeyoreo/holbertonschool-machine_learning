@@ -93,7 +93,7 @@ class Normal:
         """
         if getattr(self, 'data', None) is not None:
             raise ValueError("cannot change stddev unless data is None")
-        if value < 0:
+        if value <= 0:
             raise ValueError("stddev must be a positive value")
         self.__stddev = float(value)
 
