@@ -8,6 +8,11 @@ class Normal:
     _pi = 3.1415926536
     _e = 2.7182818285
 
+    @classmethod
+    def _erf(cls, x):   # pylint: disable=invalid-name
+        """Approximations of the Gauss error function"""
+        return (2/cls._pi**0.5) * (x - x**3/3 + x**5/10 - x**7/42 + x**9/216)
+
     def __init__(self, data=None, mean=0., stddev=1.0):
         """
         Initializes a normal distribution
@@ -129,3 +134,4 @@ class Normal:
         Return:
             the CDF value for x
         """
+        return (1 + self._erf((x - self.mean) / (self.stddev * 2 ** 0.5))) / 2

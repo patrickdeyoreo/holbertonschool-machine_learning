@@ -5,7 +5,6 @@
 class Exponential:
     """Represents an exponential distribution"""
 
-    _pi = 3.1415926536
     _e = 2.7182818285
 
     def __init__(self, data=None, lambtha=1.0):
