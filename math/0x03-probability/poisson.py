@@ -64,7 +64,7 @@ class Poisson:
         """
         if getattr(self, 'data', None) is not None:
             raise ValueError("cannot change lambtha unless data is None")
-        if value < 0:
+        if value <= 0:
             raise ValueError("lambtha must be a positive value")
         self.__lambtha = float(value)
 
