@@ -105,44 +105,38 @@ class Binomial:
             raise ValueError("p must be greater than 0 and less than 1")
         self.__p = float(value)
 
-    # def z_score(self, x):   # pylint: disable=invalid-name
+    # def pmf(self, k):   # pylint: disable=invalid-name
     #     """
-    #     Calculates the z-score of a given x-value
+    #     Calculates the value of the PMF for a given number of “successes”
     #     Arguments:
-    #         x: the x-value
+    #         k: the number of successes
     #     Return:
-    #         the z-score of x
+    #         If k is out of range, return 0.
+    #         Otherwise, return the PMF value for k.
     #     """
-    #     return (x - self.mean) / self.stddev
+    #     k = int(k)
+    #     if k < 0:
+    #         return 0
+    #     fac = 1
+    #     for num in range(k + 1):
+    #         fac *= num or 1
+    #     return self._e ** -self.lambtha * self.lambtha ** num / fac
 
-    # def x_value(self, z):   # pylint: disable=invalid-name
+    # def cdf(self, k):   # pylint: disable=invalid-name
     #     """
-    #     Calculates the x-value of a given z-score
+    #     Calculates the value of the CDF for a given number of “successes”
     #     Arguments:
-    #         z: the z-score
+    #         k: the number of successes
     #     Return:
-    #         the x-value of z
+    #         If k is out of range, return 0.
+    #         Otherwise, return the CDF value for k.
     #     """
-    #     return z * self.stddev + self.mean
-
-    # def pdf(self, x):   # pylint: disable=invalid-name
-    #     """
-    #     Calculates the value of the PDF for a given x-value
-    #     Arguments:
-    #         x: the x-value
-    #     Return:
-    #         the PDF value for x
-    #     """
-    #     numer = self._e ** (-0.5 * ((x - self.mean) / self.stddev) ** 2)
-    #     denom = self.stddev * (2 * self._pi) ** 0.5
-    #     return numer / denom
-
-    # def cdf(self, x):   # pylint: disable=invalid-name
-    #     """
-    #     Calculates the value of the CDF for a given x-value
-    #     Arguments:
-    #         x: the x-value
-    #     Return:
-    #         the CDF value for x
-    #     """
-    #     return (1 + self._erf((x - self.mean) / (self.stddev * 2 ** 0.5))) / 2
+    #     k = int(k)
+    #     if k < 0:
+    #         return 0
+    #     cdf = 0
+    #     fac = 1
+    #     for num in range(k + 1):
+    #         fac *= num or 1
+    #         cdf += self._e ** -self.lambtha * self.lambtha ** num / fac
+    #     return cdf
