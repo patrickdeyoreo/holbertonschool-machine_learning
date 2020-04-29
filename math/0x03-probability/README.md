@@ -131,6 +131,26 @@ Update the class `Normal`:
   - `z` is the z-score
   - Returns the x-value of `z`
 
+
+### [8. Normal PDF](./normal.py)
+
+Update the class `Normal`:
+
+- Instance method `pdf(self, x)`:
+  - Calculates the value of the PDF for a given x-value
+  - `x` is the x-value
+  - Returns the PDF value for `x`
+
+
+### [9. Normal CDF](./normal.py)
+
+Update the class `Normal`:
+
+- Instance method `cdf(self, x)`:
+  - Calculates the value of the CDF for a given x-value
+  - `x` is the x-value
+  - Returns the CDF value for `x`
+
 ---
 
 ## Author

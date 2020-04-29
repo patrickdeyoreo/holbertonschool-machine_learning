@@ -108,3 +108,24 @@ class Normal:
             the x-value of z
         """
         return z * self.stddev + self.mean
+
+    def pdf(self, x):   # pylint: disable=invalid-name
+        """
+        Calculates the value of the PDF for a given x-value
+        Arguments:
+            x: the x-value
+        Return:
+            the PDF value for x
+        """
+        numer = self._e ** (-0.5 * ((x - self.mean) / self.stddev) ** 2)
+        denom = self.stddev * (2 * self._pi) ** 0.5
+        return numer / denom
+
+    def cdf(self, x):   # pylint: disable=invalid-name
+        """
+        Calculates the value of the CDF for a given x-value
+        Arguments:
+            x: the x-value
+        Return:
+            the CDF value for x
+        """
