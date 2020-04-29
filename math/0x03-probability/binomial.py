@@ -97,11 +97,11 @@ class Binomial:
         """
         Sets the probability of a “success" of a binomial distribution
         Arguments:
-            value: a probability (0 <= value <= 1)
+            value: a probability (0 < value < 1)
         """
         if getattr(self, 'data', None) is not None:
             raise ValueError("cannot change p unless data is None")
-        if not 0 <= value <= 1:
+        if not 0 < value < 1:
             raise ValueError("p must be greater than 0 and less than 1")
         self.__p = float(value)
 
