@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Provides a class ``Normal'' to represent an normal distribution"""
+"""Provides a class ``Normal'' to represent a normal distribution"""
 
 
 class Normal:
-    """Represents an normal distribution"""
+    """Represents a normal distribution"""
 
     _pi = 3.1415926536
     _e = 2.7182818285
@@ -62,7 +62,7 @@ class Normal:
     @property
     def mean(self):
         """
-        Gets the mean of an normal distribution
+        Gets the mean of a normal distribution
         Return:
             mean
         """
@@ -71,7 +71,7 @@ class Normal:
     @mean.setter
     def mean(self, value):
         """
-        Sets the mean of an normal distribution
+        Sets the mean of a normal distribution
         Arguments:
             value: a number
         """
@@ -82,7 +82,7 @@ class Normal:
     @property
     def stddev(self):
         """
-        Gets the stddev of an normal distribution
+        Gets the stddev of a normal distribution
         Return:
             stddev
         """
@@ -91,7 +91,7 @@ class Normal:
     @stddev.setter
     def stddev(self, value):
         """
-        Sets the stddev of an normal distribution
+        Sets the stddev of a normal distribution
         Arguments:
             value: a positive number
         """
