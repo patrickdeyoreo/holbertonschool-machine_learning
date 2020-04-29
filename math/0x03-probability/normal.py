@@ -24,7 +24,8 @@ class Normal:
         Initializes a normal distribution
         Arguments:
             data: the data to be used to estimate the distribution
-            lambtha: expected number of occurences in a given time frame
+            mean: the mean value of the data
+            stddev: the standard deviation of the data
         """
         if data is None:
             self.data = None
