@@ -27,12 +27,9 @@ class Normal:
             mean: the mean value of the data
             stddev: the standard deviation of the data
         """
-        if data is None:
-            self.data = None
-            self.mean = mean
-            self.stddev = stddev
-        else:
-            self.data = data
+        self.mean = mean
+        self.stddev = stddev
+        self.data = data
 
     @property
     def data(self):
