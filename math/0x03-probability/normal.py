@@ -55,9 +55,9 @@ class Normal:
             raise ValueError("data must contain multiple values")
         else:
             self.__data = value[:]
-            self.__mean = sum(value) / len(value)
+            self.__mean = sum(self.data) / len(self.data)
             sum_squares = sum((x - self.mean) ** 2 for x in self.data)
-            self.__stddev = (sum_squares / (len(value))) ** 0.5
+            self.__stddev = (sum_squares / len(self.data)) ** 0.5
 
     @property
     def mean(self):
