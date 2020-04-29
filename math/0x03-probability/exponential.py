@@ -21,7 +21,7 @@ class Exponential:
     @property
     def data(self):
         """
-        Gets the data attribute of a exponential distribution
+        Gets the data of a exponential distribution
         Return:
             data
         """
@@ -30,7 +30,7 @@ class Exponential:
     @data.setter
     def data(self, value):
         """
-        Sets the data attribute of a exponential distribution
+        Sets the data of a exponential distribution
         Arguments:
             value: a list containing at least two data points (or None)
         """
@@ -47,7 +47,7 @@ class Exponential:
     @property
     def lambtha(self):
         """
-        Gets the lambtha attribute of a exponential distribution
+        Gets the lambtha of a exponential distribution
         Return:
             lambtha
         """
@@ -56,9 +56,9 @@ class Exponential:
     @lambtha.setter
     def lambtha(self, value):
         """
-        Sets the lambtha attribute of a exponential distribution
+        Sets the lambtha of a exponential distribution
         Arguments:
-            value: a positive number (or None)
+            value: a positive number
         """
         if getattr(self, 'data', None) is not None:
             raise ValueError("cannot change lambtha unless data is None")
