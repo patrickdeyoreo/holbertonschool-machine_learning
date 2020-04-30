@@ -116,7 +116,7 @@ class Binomial:
             num += 1
             fac *= num
         numer = fac
-        return numer/denom * self.p ** k * (1 - self.p) ** (self.n - k)
+        return numer / denom * self.p ** k * (1 - self.p) ** (self.n - k)
 
     def cdf(self, k):   # pylint: disable=invalid-name
         """
