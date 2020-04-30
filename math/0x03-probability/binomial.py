@@ -5,20 +5,6 @@
 class Binomial:
     """Represents a binomial distribution"""
 
-    _pi = 3.1415926536
-    _e = 2.7182818285
-
-    @classmethod
-    def _erf(cls, x):   # pylint: disable=invalid-name
-        """
-        Approximates the Gauss error function
-        Arguments:
-            x: the x-value
-        Return:
-            the probability that a random variable falls between −x and x
-        """
-        return (2/cls._pi**0.5) * (x - x**3/3 + x**5/10 - x**7/42 + x**9/216)
-
     def __init__(self, data=None, n=1, p=0.5):
         """
         Initializes a binomial distribution
