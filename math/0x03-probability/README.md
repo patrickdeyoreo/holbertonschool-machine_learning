@@ -152,7 +152,7 @@ Update the class `Normal`:
   - Returns the CDF value for `x`
 
 
-### [6. Initialize Normal](./normal.py)
+### [10. Initialize Binomial](./binomial.py)
 
 Create a class `Binomial` that represents a binomial distribution:
 
