@@ -78,6 +78,24 @@ class Neuron:
         c = self.cost(Y, self.A)
         return (P, c)
 
+    def gradient_descent(self, X, Y, A, alpha=0.05):
+        """
+        Calculates a pass of gradient descent and updates the weights and bias
+        Arguments:
+            X: numpy.ndarray with shape (nx, m) that contains the input, where
+               nx is the number of input features to the neuron, and
+               m is the number of examples
+            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            A: numpy.ndarray with shape (1, m) containing the activated output
+            alpha: the learning rate
+        """
+        m = X.shape[1]
+        dZ = A - Y
+        dW = (1 / m) * (X @ dZ.T)
+        db = (1 / m) * np.sum(dZ, axis=1)
+        self.__W -= alpha * dW[0]
+        self.__b -= alpha * db[0]
+
     @staticmethod
     def cost(Y, A):
         """
