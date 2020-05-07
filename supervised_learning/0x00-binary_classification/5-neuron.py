@@ -89,10 +89,9 @@ class Neuron:
             A: numpy.ndarray with shape (1, m) containing the activated output
             alpha: the learning rate
         """
-        m = X.shape[1]
         dZ = A - Y
-        dW = (1 / m) * (X @ dZ.T)
-        db = (1 / m) * np.sum(dZ)
+        dW = (1 / X.shape[1]) * (X @ dZ.T)
+        db = (1 / X.shape[1]) * np.sum(dZ)
         self.__W -= (alpha * dW).T
         self.__b -= (alpha * db).T
 
