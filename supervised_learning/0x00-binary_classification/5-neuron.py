@@ -92,9 +92,9 @@ class Neuron:
         m = X.shape[1]
         dZ = A - Y
         dW = (1 / m) * (X @ dZ.T)
-        db = (1 / m) * np.sum(dZ, axis=1)
-        self.__W -= alpha * dW[0]
-        self.__b -= alpha * db[0]
+        db = (1 / m) * np.sum(dZ)
+        self.__W -= (alpha * dW).T
+        self.__b -= (alpha * db).T
 
     @staticmethod
     def cost(Y, A):
