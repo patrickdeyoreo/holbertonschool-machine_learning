@@ -63,8 +63,7 @@ class Neuron:
         self.__A = self.sigmoid(self.__W.dot(X) + self.__b)
         return self.__A
 
-    @staticmethod
-    def cost(Y, A):
+    def cost(self, Y, A):
         """
         Calculates the cost of the model using logistic regression
         Arguments:
