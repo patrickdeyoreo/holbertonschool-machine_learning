@@ -64,7 +64,7 @@ class Neuron:
         return self.__A
 
     @staticmethod
-    def cost(self, Y, A):
+    def cost(Y, A):
         """
         Calculates the cost of the model using logistic regression
         Arguments:
