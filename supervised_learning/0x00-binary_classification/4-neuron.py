@@ -89,9 +89,9 @@ class Neuron:
             the cost
         """
         m = Y.shape[1]
-        c = sum(np.log(a) if y == 1 else np.log(1.0000001 - a)
-                for y, a in zip(Y[0], A[0]))
-        return -c / m
+        c1 = np.multiply(np.log(A), Y)
+        c0 = np.multiply(np.log(1.0000001 - A), (1 - Y))
+        return (-1 / m) * np.sum(c1 + c0)
 
     @staticmethod
     def sigmoid(X):
