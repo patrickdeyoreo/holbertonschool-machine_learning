@@ -60,7 +60,7 @@ class Neuron:
         Return:
             the activation state
         """
-        self.__A = self.sigmoid(self.__W.dot(X) + self.__b)
+        self.__A = self.sigmoid(self.__W @ X + self.__b)
         return self.__A
 
     @staticmethod
