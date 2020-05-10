@@ -106,8 +106,8 @@ class Neuron:
             the cost
         """
         m = Y.shape[1]
-        c1 = np.multiply(np.log(A), Y)
-        c0 = np.multiply(np.log(1.0000001 - A), (1 - Y))
+        c1 = np.log(A) * Y
+        c0 = np.log(1.0000001 - A) * (1 - Y)
         return (-1 / m) * np.sum(c1 + c0)
 
     @staticmethod
