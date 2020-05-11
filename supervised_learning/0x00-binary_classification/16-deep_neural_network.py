@@ -16,20 +16,23 @@ class DeepNeuralNetwork:
             nx: the number of input features
             layers: a list representing the number of nodes in each layer
         """
-        if not isinstance(nx, int):
+        if isinstance(nx, int) is False:
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
 
-        if not isinstance(layers, list):
-            raise TypeError("layers must be a list of positive integers")
-        if not all(isinstance(item, int) and item > 0 for item in layers):
+        if isinstance(layers, list) is False:
             raise TypeError("layers must be a list of positive integers")
 
         self.L = len(layers)
         self.cache = {}
-        self.weights = dict(
-            item for idx, dim in
-            enumerate(zip(layers, [nx] + layers), 1) for item in
-            (('W{}'.format(idx), np.random.randn(*dim) * np.sqrt(2 / dim[1])),
-             ('b{}'.format(idx), np.zeros((dim[0], 1)))))
+        self.weights = {}
+        d1 = nx
+        for index, d0 in enumerate(layers, 1):
+            if isinstance(d0, int) is False or d0 < 1:
+                raise TypeError("layers must be a list of positive integers")
+            key = 'W{}'.format(index)
+            self.weights[key] = np.random.randn(d0, d1) * np.sqrt(2 / d1)
+            key = 'b{}'.format(index)
+            self.weights[key] = np.zeros((d0, 1))
+            d1 = d0
