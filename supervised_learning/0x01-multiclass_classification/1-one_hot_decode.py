@@ -18,6 +18,7 @@ def one_hot_decode(one_hot):
         example, or None on failure
     """
     try:
-        return np.array([row.tolist().index(1) for row in one_hot.T])
+        # return np.array([row.tolist().index(1) for row in one_hot.T])
+        return np.array([np.where(row == 1)[0].item() for row in one_hot.T])
     except (TypeError, ValueError):
         return None
