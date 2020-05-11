@@ -3,6 +3,7 @@
 # pylint: disable=invalid-name
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class NeuralNetwork:
@@ -142,7 +143,9 @@ class NeuralNetwork:
         self.__W2 -= alpha * dW2
         self.__b2 -= alpha * db2
 
-    def train(self, X, Y, iterations=5000, alpha=0.05):
+    # pylint: disable=too-many-arguments,too-many-branches
+    def train(self, X, Y, iterations=5000, alpha=0.05,
+              verbose=True, graph=True, step=100):
         """
         Trains a neuron
         Arguments:
@@ -152,6 +155,9 @@ class NeuralNetwork:
             Y: numpy.ndarray with shape (1, m) that contains the correct labels
             iterations: the number of iterations to train over
             alpha: the learning rate
+            verbose: whether or not to print training information
+            graph: whether or not to plot training information upon completion
+            step: the granularity of the training information
         Return:
             evaluation of the training data following completion of training
         """
@@ -163,11 +169,38 @@ class NeuralNetwork:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
-
+        if verbose or graph:
+            if isinstance(step, int) is False:
+                raise TypeError("step must be an integer")
+            if not 0 < step <= iterations:
+                raise ValueError("step must be positive and <= iterations")
+            cost = self.evaluate(X, Y)[1]
+            if verbose:
+                print("Cost after", 0, "iterations:", cost)
+            if graph:
+                x = [0]
+                y = [cost]
         iteration = 0
+        next_step = 0
         while iteration < iterations:
-            self.gradient_descent(X, Y, *self.forward_prop(X), alpha)
+            A1, A2 = self.forward_prop(X)
+            self.gradient_descent(X, Y, A1, A2, alpha)
             iteration += 1
+            next_step += 1
+            if next_step == step:
+                next_step = 0
+                if verbose or graph:
+                    cost = self.evaluate(X, Y)[1]
+                    if verbose:
+                        print("Cost after", iteration, "iterations:", cost)
+                    if graph:
+                        x.append(iteration)
+                        y.append(cost)
+        if graph:
+            plt.title("Training Cost")
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
+            plt.plot(x, y)
         return self.evaluate(X, Y)
 
     @staticmethod

@@ -96,6 +96,7 @@ class Neuron:
         self.__W -= (alpha * dW).T
         self.__b -= (alpha * db).T
 
+    # pylint: disable=too-many-arguments,too-many-branches
     def train(self, X, Y, iterations=5000, alpha=0.05,
               verbose=True, graph=True, step=100):
         """
@@ -133,13 +134,14 @@ class Neuron:
                 x = [0]
                 y = [cost]
         iteration = 0
+        next_step = 0
         while iteration < iterations:
-            next_step = 0
-            while iteration < iterations and next_step < step:
-                self.gradient_descent(X, Y, self.forward_prop(X), alpha)
-                iteration += 1
-                next_step += 1
+            A = self.forward_prop(X)
+            self.gradient_descent(X, Y, A, alpha)
+            iteration += 1
+            next_step += 1
             if next_step == step:
+                next_step = 0
                 if verbose or graph:
                     cost = self.evaluate(X, Y)[1]
                     if verbose:
@@ -148,6 +150,9 @@ class Neuron:
                         x.append(iteration)
                         y.append(cost)
         if graph:
+            plt.title("Training Cost")
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
             plt.plot(x, y)
         return self.evaluate(X, Y)
 
