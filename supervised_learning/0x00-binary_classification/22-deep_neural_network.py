@@ -140,7 +140,8 @@ class DeepNeuralNetwork:
 
         iteration = 0
         while iteration < iterations:
-            self.gradient_descent(X, Y, *self.forward_prop(X), alpha)
+            self.forward_prop(X)
+            self.gradient_descent(Y, self.cache, alpha)
             iteration += 1
         return self.evaluate(X, Y)
 
