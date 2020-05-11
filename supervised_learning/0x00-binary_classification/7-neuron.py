@@ -140,7 +140,7 @@ class Neuron:
             self.gradient_descent(X, Y, A, alpha)
             iteration += 1
             next_step += 1
-            if next_step == step:
+            if next_step == step or iteration == iterations:
                 next_step = 0
                 if verbose or graph:
                     cost = self.evaluate(X, Y)[1]
