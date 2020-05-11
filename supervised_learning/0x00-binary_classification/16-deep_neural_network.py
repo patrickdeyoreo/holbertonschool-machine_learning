@@ -7,6 +7,7 @@ import numpy as np
 
 class DeepNeuralNetwork:
     """Represents a deep neural network for binary classification"""
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, nx, layers):
         """
@@ -30,5 +31,5 @@ class DeepNeuralNetwork:
         self.weights = dict(
             item for idx, dim in
             enumerate(zip(layers, [nx] + layers), 1) for item in
-            (('W{}'.format(idx), np.random.randn(*dim) * (2 / dim[1]) ** 0.5),
+            (('W{}'.format(idx), np.random.randn(*dim) * np.sqrt(2 / dim[1])),
              ('b{}'.format(idx), np.zeros((dim[0], 1)))))
