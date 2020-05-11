@@ -97,6 +97,25 @@ class DeepNeuralNetwork:
         c = self.cost(Y, A)
         return (P, c)
 
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """
+        Calculates a pass of gradient descent and updates the weights and bias
+        Arguments:
+            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            cache: dictionary containing the intermediary values of the network
+            alpha: the learning rate
+        """
+        m = Y.shape[1]
+        dZ = cache['A{}'.format(self.L)] - Y
+        for index in reversed(range(self.L)):
+            A = cache['A{}'.format(index)]
+            W = self.weights['W{}'.format(index + 1)]
+            dW = (1 / m) * (dZ @ A.T)
+            db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+            dZ = (W.T @ dZ) * (A * (1 - A))
+            self.__weights['W{}'.format(index + 1)] -= alpha * dW
+            self.__weights['b{}'.format(index + 1)] -= alpha * db
+
     @staticmethod
     def cost(Y, A):
         """

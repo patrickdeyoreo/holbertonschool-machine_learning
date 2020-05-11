@@ -97,6 +97,53 @@ class DeepNeuralNetwork:
         c = self.cost(Y, A)
         return (P, c)
 
+    def gradient_descent(self, Y, cache, alpha=0.05):
+        """
+        Calculates a pass of gradient descent and updates the weights and bias
+        Arguments:
+            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            cache: dictionary containing the intermediary values of the network
+            alpha: the learning rate
+        """
+        m = Y.shape[1]
+        dZ = cache['A{}'.format(self.L)] - Y
+        for index in reversed(range(self.L)):
+            A = cache['A{}'.format(index)]
+            W = self.weights['W{}'.format(index + 1)]
+            dW = (1 / m) * (dZ @ A.T)
+            db = (1 / m) * np.sum(dZ, axis=1, keepdims=True)
+            dZ = (W.T @ dZ) * (A * (1 - A))
+            self.__weights['W{}'.format(index + 1)] -= alpha * dW
+            self.__weights['b{}'.format(index + 1)] -= alpha * db
+
+    def train(self, X, Y, iterations=5000, alpha=0.05):
+        """
+        Trains a neuron
+        Arguments:
+            X: numpy.ndarray with shape (nx, m) that contains the input, where
+               nx is the number of input features to the neuron, and
+               m is the number of examples
+            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            iterations: the number of iterations to train over
+            alpha: the learning rate
+        Return:
+            evaluation of the training data following completion of training
+        """
+        if isinstance(iterations, int) is False:
+            raise TypeError("iterations must be an integer")
+        if iterations <= 0:
+            raise ValueError("iterations must be a positive integer")
+        if isinstance(alpha, float) is False:
+            raise TypeError("alpha must be a float")
+        if alpha <= 0:
+            raise ValueError("alpha must be positive")
+
+        iteration = 0
+        while iteration < iterations:
+            self.gradient_descent(X, Y, *self.forward_prop(X), alpha)
+            iteration += 1
+        return self.evaluate(X, Y)
+
     @staticmethod
     def cost(Y, A):
         """
