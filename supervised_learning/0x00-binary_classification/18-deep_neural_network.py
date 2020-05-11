@@ -74,6 +74,7 @@ class DeepNeuralNetwork:
         Return:
             the activation state
         """
+        self.__cache['A0'] = X
         for index in range(1, self.L + 1):
             W = self.weights['W{}'.format(index)]
             b = self.weights['b{}'.format(index)]
