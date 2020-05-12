@@ -18,5 +18,5 @@ def one_hot_encode(Y, classes):
     try:
         # return np.array([[float(y == n) for y in Y] for n in range(classes)])
         return np.array([np.where(Y == n, 1.0, 0.0) for n in range(classes)])
-    except Exception:  # pylint: disable=broad-except
+    except (TypeError, ValueError):
         return None
