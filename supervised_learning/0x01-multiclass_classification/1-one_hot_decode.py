@@ -14,10 +14,11 @@ def one_hot_decode(one_hot):
                  m is the number of examples
         classes: the maximum number of classes found in Y
     Return:
-        numpy.ndarray with shape (m, ) containing the numeric labels for each
+        numpy.ndarray with shape (m,) containing the numeric labels for each
         example, or None on failure
     """
     try:
+        # return np.array([row.tolist().index(1) for row in one_hot.T])
         return np.argmax(one_hot, axis=0)
     except (TypeError, ValueError):
         return None
