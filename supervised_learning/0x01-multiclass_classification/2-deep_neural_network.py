@@ -186,7 +186,7 @@ class DeepNeuralNetwork:
         """
         if not filename.endswith('.pkl'):
             filename = '.'.join((filename, 'pkl'))
-        with open(filename) as ostream:
+        with open(filename, 'wb') as ostream:
             pickle.dump(self, ostream)
 
     @staticmethod
@@ -199,9 +199,9 @@ class DeepNeuralNetwork:
             the loaded object, or None if filename doesn’t exist
         """
         try:
-            with open(filename) as istream:
+            with open(filename, 'rb') as istream:
                 return pickle.load(istream)
-        except OSError:
+        except FileNotFoundError:
             return None
 
     @staticmethod
