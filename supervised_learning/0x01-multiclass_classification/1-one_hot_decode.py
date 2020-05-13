@@ -18,7 +18,9 @@ def one_hot_decode(one_hot):
         example, or None on failure
     """
     try:
-        # return np.array([row.tolist().index(1) for row in one_hot.T])
+        if not isinstance(one_hot, np.ndarray):
+            return None
         return np.argmax(one_hot, axis=0)
+        # return np.array([row.tolist().index(1) for row in one_hot.T])
     except (TypeError, ValueError):
         return None
