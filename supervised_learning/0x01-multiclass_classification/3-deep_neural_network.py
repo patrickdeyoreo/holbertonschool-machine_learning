@@ -93,20 +93,20 @@ class DeepNeuralNetwork:
             X: numpy.ndarray with shape (nx, m) that contains the input, where
                nx is the number of input features to the neuron, and
                m is the number of examples
-            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            Y: numpy.ndarray with shape (classes, m) of the correct labels
         Return:
             the neuron’s prediction and the cost of the network, respectively
         """
         A = self.forward_prop(X)[0]
-        P = np.argmax(A)
+        C = np.where(A == np.max(A, axis=0), 1, 0)
         c = self.cost(Y, A)
-        return (P, c)
+        return (C, c)
 
     def gradient_descent(self, Y, cache, alpha=0.05):
         """
         Calculates a pass of gradient descent and updates the weights and bias
         Arguments:
-            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            Y: numpy.ndarray with shape (classes, m) of the correct labels
             cache: dictionary containing the intermediary values of the network
             alpha: the learning rate
         """
@@ -130,7 +130,7 @@ class DeepNeuralNetwork:
             X: numpy.ndarray with shape (nx, m) that contains the input, where
                nx is the number of input features to the neuron, and
                m is the number of examples
-            Y: numpy.ndarray with shape (1, m) that contains the correct labels
+            Y: numpy.ndarray with shape (classes, m) of the correct labels
             iterations: the number of iterations to train over
             alpha: the learning rate
             verbose: whether or not to print training information
@@ -212,15 +212,15 @@ class DeepNeuralNetwork:
         """
         Calculates the cost of the model using logistic regression
         Arguments:
-            Y: numpy.ndarray with shape (1, m) that contains the correct labels
-            A: numpy.ndarray with shape (1, m) containing the activated output
+            Y: numpy.ndarray with shape (classes, m) of the correct labels
+            A: numpy.ndarray with shape (classes, m) of the activated output
         Return:
             the cost
         """
-        # m = Y.shape[1]
+        m = Y.shape[1]
         # log_probs = -np.log(A[Y.astype(int), range(m)])
         # return np.sum(log_probs) / m
-        return -np.sum(Y * np.log(A)) / Y.shape[1]
+        return -np.sum(Y * np.log(A)) / m
 
     @staticmethod
     def sigmoid(X):
@@ -253,6 +253,6 @@ class DeepNeuralNetwork:
         Return:
             the softmax of X
         """
-        logits = np.exp(X - np.max(X))
+        logits = np.exp(X)
         # return logits / np.sum(logits)
         return logits / np.sum(logits, axis=0, keepdims=True)
