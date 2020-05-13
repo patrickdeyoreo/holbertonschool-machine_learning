@@ -253,6 +253,7 @@ class DeepNeuralNetwork:
         Return:
             the softmax of X
         """
-        logits = np.exp(X)
+        # logits = np.exp(X)
+        logits = np.exp(X - np.max(X))
         # return logits / np.sum(logits)
         return logits / np.sum(logits, axis=0, keepdims=True)
