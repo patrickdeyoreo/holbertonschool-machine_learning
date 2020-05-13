@@ -16,7 +16,7 @@ def one_hot_encode(Y, classes):
         one-hot encoding of Y with shape (classes, m), or None on failure
     """
     try:
-        if not isinstance(Y, np.ndarray) or classes <= np.max(Y):
+        if not isinstance(Y, np.ndarray) or classes <= Y.max():
             return None
         return np.array([np.where(Y == n, 1.0, 0.0) for n in range(classes)])
         # return np.array([[float(y == n) for y in Y] for n in range(classes)])
