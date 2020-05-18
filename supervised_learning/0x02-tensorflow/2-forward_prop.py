@@ -2,7 +2,6 @@
 """Provides a function to perform forward propagation"""
 # pylint: disable=invalid-name
 
-
 import tensorflow as tf
 
 create_layer = __import__('1-create_layer').create_layer
@@ -18,7 +17,7 @@ def forward_prop(x, layer_sizes=[], activations=[]):
     Return:
         the prediction of the network in tensor form
     """
-    prev = x
-    for layer, activation in zip(layer_sizes, activations):
-        prev = create_layer(prev, layer, activation)
-    return prev
+    y_pred = x
+    for size, activation in zip(layer_sizes, activations):
+        y_pred = create_layer(y_pred, size, activation)
+    return y_pred
