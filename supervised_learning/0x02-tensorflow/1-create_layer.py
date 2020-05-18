@@ -11,7 +11,7 @@ def create_layer(prev, n, activation):
     Arguments:
         prev: the tensor output of the previous layer
         n: the number of nodes in the layer to create
-        classes: the number of classes in our classifier
+        activation: the activation function
     Returns:
         the tensor output of the layer
     """
