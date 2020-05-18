@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
-"""Provides a function to compute accuracy"""
+"""Provides a function to calculate the accuracy of a prediction"""
 
 import tensorflow as tf
 
 
 def calculate_accuracy(y, y_pred):
-    """uses tf.reduce_mean, y is the lables, y_pred is the predictions"""
-    label = tf.argmax(y, 1)
-    pred = tf.argmax(pred, 1)
-    equal = tf.equal(pred, label)
-    return tf.reduce_mean(tf.cast(equal, tf.float32))
+    """
+    Calculates the accuracy of a prediction
+    Arguments:
+        y: a placeholder for the labels of the input
+        y_pred: the predictions
+    Return:
+        a tensor containing the accuracy of the prediction
+    """
+    return tf.reduce_mean(
+        tf.cast(tf.equal(tf.argmax(y_pred, 1), tf.argmax(y, 1)), tf.float32))

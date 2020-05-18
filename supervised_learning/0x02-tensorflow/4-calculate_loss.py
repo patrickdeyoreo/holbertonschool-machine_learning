@@ -4,13 +4,13 @@
 import tensorflow as tf
 
 
-def calculate_loss(y, pred):
+def calculate_loss(y, y_pred):
     """
     Calculates softmax loss
     Arguments:
         y: the correct labels
-        pred: the predicted labels
+        y_pred: the predicted labels
     Return:
         a tensor containing the loss of the prediction
     """
-    return tf.losses.softmax_cross_entropy(logits=pred, onehot_labels=y)
+    return tf.losses.softmax_cross_entropy(logits=y_pred, onehot_labels=y)
