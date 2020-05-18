@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Provides a function to calculate the accuracy of a prediction"""
+# pylint: disable=invalid-name
 
 import tensorflow as tf
 
