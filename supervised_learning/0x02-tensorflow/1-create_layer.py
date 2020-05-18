@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Provides q function to create a layer"""
+"""Provides a function to create a layer"""
 
 import tensorflow as tf
 
