@@ -68,21 +68,18 @@ def train_mini_batch(
 
             step = 0
             for bat in range(batches + 1):
-                step += 1
 
-                if bat == batches:
-                    if rem == 0:
-                        break
-                    X_bat = X_perm[bat * batch_size:]
-                    Y_bat = Y_perm[bat * batch_size:]
-                else:
-                    X_bat = X_perm[bat * batch_size:(bat + 1) * batch_size]
-                    Y_bat = Y_perm[bat * batch_size:(bat + 1) * batch_size]
+                if bat == batches and rem == 0:
+                    break
+
+                X_bat = X_perm[bat * batch_size:(bat + 1) * batch_size]
+                Y_bat = Y_perm[bat * batch_size:(bat + 1) * batch_size]
 
                 session.run(
                     train_op,
                     feed_dict={x: X_bat, y: Y_bat})
 
+                step += 1
                 if step % 100 == 0:
                     loss_b = session.run(
                         loss,
