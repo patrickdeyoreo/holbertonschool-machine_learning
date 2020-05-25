@@ -40,6 +40,8 @@ def train_mini_batch(
         loss = tf.get_collection('loss')[0]
         train_op = tf.get_collection('train_op')[0]
 
+        batches, rem = divmod(X_train.shape[0], batch_size)
+
         for epoch in range(epochs + 1):
             loss_t = session.run(
                 loss,
@@ -61,10 +63,9 @@ def train_mini_batch(
             print("\tValidation Accuracy: {}".format(accuracy_v))
 
             if epoch == epochs:
-                break
+                return saver.save(session, save_path)
 
             X_perm, Y_perm = shuffle_data(X_train, Y_train)
-            batches, rem = divmod(X_train.shape[0], batch_size)
 
             step = 0
             for bat in range(batches + 1):
@@ -91,6 +92,3 @@ def train_mini_batch(
                     print("\tStep {}:".format(step))
                     print("\t\tCost: {}".format(loss_b))
                     print("\t\tAccuracy: {}".format(accuracy_b))
-
-        save_path = saver.save(session, save_path)
-    return save_path
