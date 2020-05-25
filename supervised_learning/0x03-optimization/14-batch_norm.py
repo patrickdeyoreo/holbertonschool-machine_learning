@@ -17,12 +17,11 @@ def create_batch_norm_layer(prev, n, activation):
     Return:
         a tensor of the activated output for the layer
     """
-    kwgs = {}
     init = tf.contrib.layers.variance_scaling_initializer(mode='FAN_AVG')
     layer = tf.layers.Dense(units=n, activation=None, kernel_initializer=init)
-    kwgs['mean'], kwgs['variance'] = tf.nn.moments(layer(prev), axes=[0])
-    kwgs['offset'] = tf.Variable(tf.zeros((1, n)), trainable=True, name='beta')
-    kwgs['scale'] = tf.Variable(tf.ones((1, n)), trainable=True, name='gamma')
-    kwgs['variance_epsilon'] = 1e-8
-    norm = tf.nn.batch_normalization(layer(prev), **kwgs)
+    mean, variance = tf.nn.moments(layer(prev), axes=[0])
+    offset = tf.Variable(tf.zeros([n]), trainable=True, name='beta')
+    scale = tf.Variable(tf.ones([n]), trainable=True, name='gamma')
+    norm = tf.nn.batch_normalization(
+        layer(prev), mean, variance, offset, scale, variance_epsilon=1e-8)
     return activation(norm)
