@@ -2,7 +2,7 @@
 """
 Provides a function to train a neural network using mini-batch gradient descent
 """
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,too-many-arguments,too-many-locals
 import tensorflow as tf
 
 shuffle_data = __import__('2-shuffle_data').shuffle_data
@@ -63,7 +63,7 @@ def train_mini_batch(
             print("\tValidation Accuracy: {}".format(accuracy_v))
 
             if epoch == epochs:
-                return saver.save(session, save_path)
+                break
 
             X_perm, Y_perm = shuffle_data(X_train, Y_train)
 
@@ -92,3 +92,5 @@ def train_mini_batch(
                     print("\tStep {}:".format(step))
                     print("\t\tCost: {}".format(loss_b))
                     print("\t\tAccuracy: {}".format(accuracy_b))
+
+        return saver.save(session, save_path)
