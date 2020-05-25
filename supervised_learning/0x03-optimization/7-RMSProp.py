@@ -19,6 +19,6 @@ def update_variables_RMSProp(alpha, beta2, epsilon, var, grad, s):
         the updated variable and the new moment, respectively
     """
     s *= beta2
-    s += (1 - beta2) * (grad ** 2)
+    s += (1 - beta2) * grad ** 2
     var -= alpha * grad / (s ** 0.5 + epsilon)
     return (var, s)
