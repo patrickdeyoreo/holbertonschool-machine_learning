@@ -231,6 +231,7 @@ def model(
 
                 step = 0
                 while step < batches:
+
                     batch = slice(step * batch_size, (step + 1) * batch_size)
                     X_bat = X_perm[batch]
                     Y_bat = Y_perm[batch]
