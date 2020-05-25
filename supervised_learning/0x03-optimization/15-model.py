@@ -5,13 +5,8 @@ tensorflow using Adam optimization, mini-batch gradient descent, learning rate
 decay, and batch normalization
 """
 # pylint: disable=invalid-name,too-many-arguments
+import numpy as np
 import tensorflow as tf
-
-shuffle_data = __import__('2-shuffle_data').shuffle_data
-train_mini_batch = __import__('3-mini_batch').train_mini_batch
-create_Adam_op = __import__('10-Adam').create_Adam_op
-learning_rate_decay = __import__('12-learning_rate_decay').learning_rate_decay
-create_batch_norm_layer = __import__('14-batch_norm').create_batch_norm_layer
 
 
 def create_placeholders(nx, classes):
@@ -24,40 +19,52 @@ def create_placeholders(nx, classes):
         x: the placeholder for the input data to the neural network
         y: the placeholder for the one-hot labels for the input data
     """
-    return (tf.placeholder(tf.float32, shape=(None, nx), name='x'),
-            tf.placeholder(tf.float32, shape=(None, classes), name='y'))
+    x = tf.placeholder(tf.float32, shape=(None, nx), name='x')
+    y = tf.placeholder(tf.float32, shape=(None, classes), name='y')
+    return (x, y)
 
 
-def create_layer(prev, n, activation):
+def create_layer(prev, n, activation, batch_norm=False, **kwgs):
     """
     Creates a layer for a neural network
     Arguments:
         prev: the tensor output of the previous layer
         n: the number of nodes in the layer to create
         activation: the activation function
+        batch_norm: create a batch-norm layer if true
     Returns:
         the tensor output of the layer
     """
     init = tf.contrib.layers.variance_scaling_initializer(mode='FAN_AVG')
     layer = tf.layers.Dense(
-        units=n, activation=activation, kernel_initializer=init, name='layer')
-    return layer(prev)
+        units=n, activation=None, kernel_initializer=init, name='layer')
+    layer = layer(prev)
+    if batch_norm:
+        mean, variance = tf.nn.moments(layer, axes=[0])
+        beta = tf.Variable(tf.zeros((1, n)), trainable=True, name='beta')
+        gamma = tf.Variable(tf.ones((1, n)), trainable=True, name='gamma')
+        layer = tf.nn.batch_normalization(
+            layer, mean=mean, variance=variance, offset=beta, scale=gamma,
+            variance_epsilon=kwgs.get('epsilon', 1e-8))
+    return layer if activation is None else activation(layer)
 
 
-def forward_prop(x, layer_sizes=[], activations=[]):
+def forward_prop(x, layers, activations, **kwgs):
     """
     Performs forward propagation in a neural network
     Arguments:
         x: the placeholder for input
-        layer_sizes: a list of the number of nodes in each layer
+        layers: a list of the number of nodes in each layer
         activations: a list of activation functions to use
+        kwgs: keyword arguments to pass on to create_layer
     Return:
         the prediction of the network in tensor form
     """
     # pylint: disable=dangerous-default-value
     y_pred = x
-    for size, activation in zip(layer_sizes, activations):
-        y_pred = create_layer(y_pred, size, activation)
+    for index, (layer, activation) in enumerate(zip(layers, activations), 1):
+        batch_norm = index < len(layers)
+        y_pred = create_layer(y_pred, layer, activation, batch_norm, **kwgs)
     return y_pred
 
 
@@ -70,9 +77,9 @@ def calculate_accuracy(y, y_pred):
     Return:
         a tensor containing the accuracy of the prediction
     """
-    real = tf.argmax(y, 1)
+    true = tf.argmax(y, 1)
     pred = tf.argmax(y_pred, 1)
-    return tf.reduce_mean(tf.cast(tf.equal(pred, real), tf.float32))
+    return tf.reduce_mean(tf.cast(tf.equal(pred, true), tf.float32))
 
 
 def calculate_loss(y, y_pred):
@@ -85,6 +92,58 @@ def calculate_loss(y, y_pred):
         a tensor containing the loss of the prediction
     """
     return tf.losses.softmax_cross_entropy(logits=y_pred, onehot_labels=y)
+
+
+def shuffle_data(X, Y):
+    """
+    Shuffles the data in two matrices in the same way
+    Arguments:
+        X: the first np.ndarray of shape (m, nx) to shuffle, where
+           m is the number of data points, and
+           nx is the number of features
+        Y: the second np.ndarray of shape (m, ny) to shuffle, where
+           m is the same number of data points as in X, and
+           ny is the number of features in Y
+    Return:
+        the shuffled matrices
+    """
+    perm = np.random.permutation(X.shape[0])
+    return (X[perm], Y[perm])
+
+
+def create_Adam_op(loss, alpha, beta1, beta2, epsilon):
+    """
+    Creates a training operation for a neural network in tensorflow using
+    the Adam optimization algorithm
+    Arguments:
+        loss: the loss of the network
+        alpha: the learning rate
+        beta1: the weight used for the first moment
+        beta2: the weight used for the second moment
+        epsilon: a small number to avoid division by zero
+    Return:
+        the Adam optimization operation
+    """
+    optimizer = tf.train.AdamOptimizer(
+        learning_rate=alpha, beta1=beta1, beta2=beta2, epsilon=epsilon)
+    return optimizer.minimize(loss)
+
+
+def learning_rate_decay(alpha, decay_rate, global_step, decay_step):
+    """
+    Creates a learning rate decay operation using inverse time decay
+    Arguments:
+        alpha: the original learning rate
+        decay_rate: the weight to determine the rate at which alpha will decay
+        global_step: the number of passes of gradient descent that have elapsed
+        decay_step: the number of passes of gradient descent that should occur
+                    before alpha is decayed further
+    Return:
+        the learning rate decay operation
+    """
+    return tf.train.inverse_time_decay(
+        learning_rate=alpha, global_step=global_step,
+        decay_steps=decay_step, decay_rate=decay_rate, staircase=True)
 
 
 def model(
@@ -118,7 +177,7 @@ def model(
     alpha = learning_rate_decay(alpha, decay_rate, global_step, 1)
 
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
-    y_pred = forward_prop(x, layers, activations)
+    y_pred = forward_prop(x, layers, activations, epsilon=epsilon)
     loss = calculate_loss(y, y_pred)
     accuracy = calculate_accuracy(y, y_pred)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
@@ -141,24 +200,27 @@ def model(
 
         for epoch in range(epochs + 1):
 
-            loss_t = session.run(
-                loss,
-                feed_dict={x: X_train, y: Y_train})
-            accuracy_t = session.run(
-                accuracy,
-                feed_dict={x: X_train, y: Y_train})
-            loss_v = session.run(
-                loss,
-                feed_dict={x: X_valid, y: Y_valid})
-            accuracy_v = session.run(
-                accuracy,
-                feed_dict={x: X_valid, y: Y_valid})
-
             print("After {} epochs:".format(epoch))
-            print("\tTraining Cost: {}".format(loss_t))
-            print("\tTraining Accuracy: {}".format(accuracy_t))
-            print("\tValidation Cost: {}".format(loss_v))
-            print("\tValidation Accuracy: {}".format(accuracy_v))
+            print("\tTraining Cost: {}".format(
+                session.run(
+                    loss,
+                    feed_dict={x: X_train, y: Y_train})
+            ))
+            print("\tTraining Accuracy: {}".format(
+                session.run(
+                    accuracy,
+                    feed_dict={x: X_train, y: Y_train})
+            ))
+            print("\tValidation Cost: {}".format(
+                session.run(
+                    loss,
+                    feed_dict={x: X_valid, y: Y_valid})
+            ))
+            print("\tValidation Accuracy: {}".format(
+                session.run(
+                    accuracy,
+                    feed_dict={x: X_valid, y: Y_valid})
+            ))
 
             if epoch < epochs:
 
@@ -173,23 +235,21 @@ def model(
                     X_bat = X_perm[bat * batch_size:(bat + 1) * batch_size]
                     Y_bat = Y_perm[bat * batch_size:(bat + 1) * batch_size]
 
-                    session.run(
-                        train_op,
-                        feed_dict={x: X_bat, y: Y_bat})
+                    session.run(train_op, feed_dict={x: X_bat, y: Y_bat})
 
                     bat += 1
-
                     if bat % 100 == 0:
 
-                        loss_b = session.run(
-                            loss,
-                            feed_dict={x: X_bat, y: Y_bat})
-                        accuracy_b = session.run(
-                            accuracy,
-                            feed_dict={x: X_bat, y: Y_bat})
-
                         print("\tStep {}:".format(bat))
-                        print("\t\tCost: {}".format(loss_b))
-                        print("\t\tAccuracy: {}".format(accuracy_b))
+                        print("\t\tCost: {}".format(
+                            session.run(
+                                loss,
+                                feed_dict={x: X_bat, y: Y_bat})
+                        ))
+                        print("\t\tAccuracy: {}".format(
+                            session.run(
+                                accuracy,
+                                feed_dict={x: X_bat, y: Y_bat})
+                        ))
 
         return saver.save(session, save_path)
