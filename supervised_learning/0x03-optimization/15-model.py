@@ -77,8 +77,9 @@ def calculate_accuracy(y, y_pred):
     Return:
         a tensor containing the accuracy of the prediction
     """
-    return tf.reduce_mean(
-        tf.cast(tf.equal(tf.argmax(y_pred, 1), tf.argmax(y, 1)), tf.float32))
+    true = tf.argmax(y, 1)
+    pred = tf.argmax(y_pred, 1)
+    return tf.reduce_mean(tf.cast(tf.equal(pred, true), tf.float32))
 
 
 def calculate_loss(y, y_pred):
@@ -180,17 +181,10 @@ def model(
     loss = calculate_loss(y, y_pred)
     accuracy = calculate_accuracy(y, y_pred)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
-    params = {
-        'x': x,
-        'y': y,
-        'y_pred': y_pred,
-        'loss': loss,
-        'accuracy': accuracy,
-        'train_op': train_op,
-    }
+    params = {'x', 'y', 'y_pred', 'loss', 'accuracy', 'train_op'}
 
-    for key, value in params.items():
-        tf.add_to_collection(key, value)
+    for name in params:
+        tf.add_to_collection(name, locals()[name])
 
     if X_train.shape[0] % batch_size == 0:
         batches = X_train.shape[0] // batch_size
