@@ -16,7 +16,7 @@ def train_mini_batch(
         save_path="/tmp/model.ckpt",
 ):
     """
-    Trains neural network using mini-batch gradient descent
+    Trains a saved neural network using mini-batch gradient descent
     Arguments:
         X_train: np.ndarray of shape (m, 784) containing the training data
         Y_train: one-hot np.ndarray of shape (m, 10) of the training labels
