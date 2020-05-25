@@ -40,9 +40,13 @@ def train_mini_batch(
         loss = tf.get_collection('loss')[0]
         train_op = tf.get_collection('train_op')[0]
 
-        batches, rem = divmod(X_train.shape[0], batch_size)
+        if X_train.shape[0] % batch_size == 0:
+            batches = X_train.shape[0] // batch_size
+        else:
+            batches = X_train.shape[0] // batch_size + 1
 
         for epoch in range(epochs + 1):
+
             loss_t = session.run(
                 loss,
                 feed_dict={x: X_train, y: Y_train})
@@ -62,35 +66,33 @@ def train_mini_batch(
             print("\tValidation Cost: {}".format(loss_v))
             print("\tValidation Accuracy: {}".format(accuracy_v))
 
-            if epoch == epochs:
-                break
+            if epoch < epochs:
 
-            X_perm, Y_perm = shuffle_data(X_train, Y_train)
+                X_perm, Y_perm = shuffle_data(X_train, Y_train)
 
-            step = 0
-            for bat in range(batches + 1):
+                bat = 0
+                while bat < batches:
 
-                if bat == batches and rem == 0:
-                    break
+                    X_bat = X_perm[bat * batch_size:(bat + 1) * batch_size]
+                    Y_bat = Y_perm[bat * batch_size:(bat + 1) * batch_size]
 
-                X_bat = X_perm[bat * batch_size:(bat + 1) * batch_size]
-                Y_bat = Y_perm[bat * batch_size:(bat + 1) * batch_size]
-
-                session.run(
-                    train_op,
-                    feed_dict={x: X_bat, y: Y_bat})
-
-                step += 1
-                if step % 100 == 0:
-                    loss_b = session.run(
-                        loss,
-                        feed_dict={x: X_bat, y: Y_bat})
-                    accuracy_b = session.run(
-                        accuracy,
+                    session.run(
+                        train_op,
                         feed_dict={x: X_bat, y: Y_bat})
 
-                    print("\tStep {}:".format(step))
-                    print("\t\tCost: {}".format(loss_b))
-                    print("\t\tAccuracy: {}".format(accuracy_b))
+                    bat += 1
+
+                    if bat % 100 == 0:
+
+                        loss_b = session.run(
+                            loss,
+                            feed_dict={x: X_bat, y: Y_bat})
+                        accuracy_b = session.run(
+                            accuracy,
+                            feed_dict={x: X_bat, y: Y_bat})
+
+                        print("\tStep {}:".format(bat))
+                        print("\t\tCost: {}".format(loss_b))
+                        print("\t\tAccuracy: {}".format(accuracy_b))
 
         return saver.save(session, save_path)
