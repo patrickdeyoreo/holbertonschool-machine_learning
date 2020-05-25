@@ -3,6 +3,7 @@
 Provides a function that updates a variable using the Adam algorithm
 """
 # pylint: disable=invalid-name,too-many-arguments
+import numpy as np
 
 
 def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
@@ -27,5 +28,5 @@ def update_variables_Adam(alpha, beta1, beta2, epsilon, var, grad, v, s, t):
     s += (1 - beta2) * grad ** 2
     v_b = v / (1 - beta1 ** t)
     s_b = s / (1 - beta2 ** t)
-    var -= alpha * v_b / (s_b ** 0.5 + epsilon)
+    var -= alpha * v_b / (np.sqrt(s_b) + epsilon)
     return (var, v, s)
