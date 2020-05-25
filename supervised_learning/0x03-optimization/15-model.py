@@ -77,9 +77,8 @@ def calculate_accuracy(y, y_pred):
     Return:
         a tensor containing the accuracy of the prediction
     """
-    true = tf.argmax(y, 1)
-    pred = tf.argmax(y_pred, 1)
-    return tf.reduce_mean(tf.cast(tf.equal(pred, true), tf.float32))
+    return tf.reduce_mean(
+        tf.cast(tf.equal(tf.argmax(y_pred, 1), tf.argmax(y, 1)), tf.float32))
 
 
 def calculate_loss(y, y_pred):
@@ -181,26 +180,33 @@ def model(
     loss = calculate_loss(y, y_pred)
     accuracy = calculate_accuracy(y, y_pred)
     train_op = create_Adam_op(loss, alpha, beta1, beta2, epsilon)
-    params = {'x', 'y', 'y_pred', 'loss', 'accuracy', 'train_op'}
+    params = {
+        'x': x,
+        'y': y,
+        'y_pred': y_pred,
+        'loss': loss,
+        'accuracy': accuracy,
+        'train_op': train_op,
+    }
 
-    for name in params:
-        tf.add_to_collection(name, locals()[name])
-
-    init = tf.global_variables_initializer()
-    saver = tf.train.Saver()
+    for key, value in params.items():
+        tf.add_to_collection(key, value)
 
     if X_train.shape[0] % batch_size == 0:
         batches = X_train.shape[0] // batch_size
     else:
         batches = X_train.shape[0] // batch_size + 1
 
+    saver = tf.train.Saver()
+
     with tf.Session() as session:
 
-        session.run(init)
+        session.run(tf.global_variables_initializer())
 
         for epoch in range(epochs + 1):
 
             print("After {} epochs:".format(epoch))
+
             print("\tTraining Cost: {}".format(
                 session.run(
                     loss,
@@ -229,18 +235,19 @@ def model(
 
                 X_perm, Y_perm = shuffle_data(X_train, Y_train)
 
-                bat = 0
-                while bat < batches:
-
-                    X_bat = X_perm[bat * batch_size:(bat + 1) * batch_size]
-                    Y_bat = Y_perm[bat * batch_size:(bat + 1) * batch_size]
+                step = 0
+                while step < batches:
+                    batch = slice(step * batch_size, (step + 1) * batch_size)
+                    X_bat = X_perm[batch]
+                    Y_bat = Y_perm[batch]
 
                     session.run(train_op, feed_dict={x: X_bat, y: Y_bat})
 
-                    bat += 1
-                    if bat % 100 == 0:
+                    step += 1
+                    if step % 100 == 0:
 
-                        print("\tStep {}:".format(bat))
+                        print("\tStep {}:".format(step))
+
                         print("\t\tCost: {}".format(
                             session.run(
                                 loss,
