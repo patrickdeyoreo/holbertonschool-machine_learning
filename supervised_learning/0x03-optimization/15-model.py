@@ -24,39 +24,40 @@ def create_placeholders(nx, classes):
     return (x, y)
 
 
-def create_layer(prev, n, activation, batch_norm=False, **kwgs):
+def create_layer(prev, n, activation, batch_norm=False, epsilon=1e-8):
     """
     Creates a layer for a neural network
     Arguments:
         prev: the tensor output of the previous layer
         n: the number of nodes in the layer to create
         activation: the activation function
-        batch_norm: create a batch-norm layer if true
+        batch_norm: if true, create a batch-norm layer
+        epsilon: variance epsilon for batch-norm layer
     Returns:
         the tensor output of the layer
     """
     init = tf.contrib.layers.variance_scaling_initializer(mode='FAN_AVG')
     layer = tf.layers.Dense(
         units=n, activation=None, kernel_initializer=init, name='layer')
-    layer = layer(prev)
+    tensor = layer(prev)
     if batch_norm:
-        mean, variance = tf.nn.moments(layer, axes=[0])
+        mean, variance = tf.nn.moments(layer(prev), axes=[0])
         beta = tf.Variable(tf.zeros((1, n)), trainable=True, name='beta')
         gamma = tf.Variable(tf.ones((1, n)), trainable=True, name='gamma')
-        layer = tf.nn.batch_normalization(
-            layer, mean=mean, variance=variance, offset=beta, scale=gamma,
-            variance_epsilon=kwgs.get('epsilon', 1e-8))
-    return layer if activation is None else activation(layer)
+        tensor = tf.nn.batch_normalization(
+            layer(prev), mean=mean, variance=variance,
+            offset=beta, scale=gamma, variance_epsilon=epsilon)
+    return tensor if activation is None else activation(tensor)
 
 
-def forward_prop(x, layers, activations, **kwgs):
+def forward_prop(x, layers, activations, epsilon=1e-8):
     """
     Performs forward propagation in a neural network
     Arguments:
         x: the placeholder for input
         layers: a list of the number of nodes in each layer
         activations: a list of activation functions to use
-        kwgs: keyword arguments to pass on to create_layer
+        epsilon: variance epsilon for batch-norm layer
     Return:
         the prediction of the network in tensor form
     """
@@ -64,7 +65,7 @@ def forward_prop(x, layers, activations, **kwgs):
     y_pred = x
     for index, (layer, activation) in enumerate(zip(layers, activations), 1):
         batch_norm = index < len(layers)
-        y_pred = create_layer(y_pred, layer, activation, batch_norm, **kwgs)
+        y_pred = create_layer(y_pred, layer, activation, batch_norm, epsilon)
     return y_pred
 
 
@@ -192,10 +193,11 @@ def model(
         batches = X_train.shape[0] // batch_size + 1
 
     saver = tf.train.Saver()
+    init = tf.global_variables_initializer()
 
     with tf.Session() as session:
 
-        session.run(tf.global_variables_initializer())
+        session.run(init)
 
         for epoch in range(epochs + 1):
 
