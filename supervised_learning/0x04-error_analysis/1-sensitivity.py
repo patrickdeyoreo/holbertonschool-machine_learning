@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Provides a function that calculates sensitivity for a confusion matrix"""
 # pylint: disable=invalid-name
+import numpy as np
 
 
 def sensitivity(confusion):
@@ -13,6 +14,6 @@ def sensitivity(confusion):
     Return:
         np.ndarray of shape (classes,) containing the sensitivity of each class
     """
-    TP = confusion.diagonal()
+    TP = np.diagonal(confusion)
     TP_FN = confusion.sum(axis=1)
     return TP / TP_FN
