@@ -174,7 +174,7 @@ def model(
     X_train, Y_train = Data_train
     X_valid, Y_valid = Data_valid
 
-    global_step = tf.Variable(0, trainable=False)
+    global_step = tf.Variable(0, trainable=False, name='global_step')
     alpha = learning_rate_decay(alpha, decay_rate, global_step, 1)
 
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
@@ -202,7 +202,6 @@ def model(
         for epoch in range(epochs + 1):
 
             print("After {} epochs:".format(epoch))
-
             print("\tTraining Cost: {}".format(
                 session.run(
                     loss,
@@ -234,17 +233,14 @@ def model(
                 step = 0
                 while step < batches:
 
-                    batch = slice(step * batch_size, (step + 1) * batch_size)
-                    X_bat = X_perm[batch]
-                    Y_bat = Y_perm[batch]
+                    X_bat = X_perm[step * batch_size:(step + 1) * batch_size]
+                    Y_bat = Y_perm[step * batch_size:(step + 1) * batch_size]
 
                     session.run(train_op, feed_dict={x: X_bat, y: Y_bat})
 
                     step += 1
                     if step % 100 == 0:
-
                         print("\tStep {}:".format(step))
-
                         print("\t\tCost: {}".format(
                             session.run(
                                 loss,
