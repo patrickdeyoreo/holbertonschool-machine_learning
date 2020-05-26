@@ -3,9 +3,6 @@
 # pylint: disable=invalid-name
 import numpy as np
 
-sensitivity = __import__('1-sensitivity').sensitivity
-precision = __import__('2-precision').precision
-
 
 def f1_score(confusion):
     """
@@ -17,7 +14,7 @@ def f1_score(confusion):
     Return:
         np.ndarray of shape (classes,) containing the F1 score of each class
     """
-    TP = confusion.diagonal()
-    P = confusion.sum(axis=0)
-    TP_FN = confusion.sum(axis=1)
+    TP = np.diagonal(confusion)
+    P = np.sum(confusion, axis=0)
+    TP_FN = np.sum(confusion, axis=1)
     return 2 * TP / (P + TP_FN)
