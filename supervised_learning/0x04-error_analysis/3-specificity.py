@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Provides a function that calculates specificity for a confusion matrix"""
 # pylint: disable=invalid-name
+import numpy as np
 
 
 def specificity(confusion):
@@ -13,10 +14,10 @@ def specificity(confusion):
     Return:
         np.ndarray of shape (classes,) containing the specificity of each class
     """
-    TP = confusion.diagonal()
-    P = confusion.sum(axis=0)
-    TP_FN = confusion.sum(axis=1)
+    TP = np.diagonal(confusion)
+    P = np.sum(confusion, axis=0)
+    TP_FN = np.sum(confusion, axis=1)
     FP = P - TP
     TP_F = TP_FN + FP
-    TN = confusion.sum() - TP_F
+    TN = np.sum(confusion) - TP_F
     return TN / (TN + FP)
