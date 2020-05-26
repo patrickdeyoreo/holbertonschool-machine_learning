@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Provides a function that calculates precision for a confusion matrix"""
 # pylint: disable=invalid-name
-import numpy as np
 
 
 def precision(confusion):
@@ -14,5 +13,6 @@ def precision(confusion):
     Return:
         np.ndarray of shape (classes,) containing the precision of each class
     """
-    tf_pos = confusion.sum(axis=0)
-    return np.array([p[n] / tf_pos[n] for n, p in enumerate(confusion)])
+    TP = confusion.diagonal()
+    P = confusion.sum(axis=0)
+    return TP / P
