@@ -12,7 +12,8 @@ def early_stopping(cost, opt_cost, threshold, patience, count):
 
     Early stopping should occur when the validation cost of the network has not
     decreased relative to the optimal validation cost by more than the
-    threshold over a specific patience count.
+    threshold over a specific patience count
+
     Arguments:
         cost: the current validation cost of the neural network
         opt_cost: the lowest recorded validation cost of the neural network

@@ -22,10 +22,12 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
     """
     Updates the weights and biases of a neural network by performing
     gradient descent with Dropout regularization
+
     The neural network uses tanh activations on each layer except the last,
     which uses a softmax activation
+
     Arguments:
-        Y: a one-hot np.ndarray of shape (classes, m) of correct labels where
+        Y: a one-hot np.ndarray of shape (classes, m) of correct labels, where
            classes is the number of classes, and
            m is the number of data points
         weights: a dictionary of the weights and biases of the neural network
@@ -39,14 +41,12 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
     for layer in reversed(range(1, L)):
         A = cache['A{}'.format(layer)]
         D = cache['D{}'.format(layer)]
-        W = weights['W{}'.format(layer + 1)]
         dW = dZ @ A.T / keep_prob / m
         db = np.sum(dZ, axis=1, keepdims=True) / keep_prob / m
-        dZ = W.T @ dZ * tanh_prime(A) * D
+        dZ = weights['W{}'.format(layer + 1)].T @ dZ * tanh_prime(A) * D
         weights['W{}'.format(layer + 1)] -= alpha * dW
         weights['b{}'.format(layer + 1)] -= alpha * db
-    A = cache['A0']
-    dW = dZ @ A.T / m
+    dW = dZ @ cache['A0'].T / m
     db = np.sum(dZ, axis=1, keepdims=True) / m
     weights['W1'] -= alpha * dW
     weights['b1'] -= alpha * db
