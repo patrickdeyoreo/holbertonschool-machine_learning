@@ -25,8 +25,8 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     The neural network uses tanh activations on each layer except the last,
     which uses a softmax activation
     Arguments:
-        Y: one-hot np.ndarray of shape (classes, m) of the correct labels
-           classes is the number of classes
+        Y: a one-hot np.ndarray of shape (classes, m) of correct labels, where
+           classes is the number of classes, and
            m is the number of data points
         weights: a dictionary of the weights and biases of the network
         cache: a dictionary of the output of each layer of the network
