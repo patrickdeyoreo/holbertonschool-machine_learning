@@ -48,12 +48,12 @@ def dropout_forward_prop(X, weights, L, keep_prob):
     """
     outputs = {}
     A = outputs['A0'] = X
-    for layer in range(1, L):
-        W = weights['W{}'.format(layer)]
-        b = weights['b{}'.format(layer)]
-        D = outputs['D{}'.format(layer)] = np.random.binomial(
+    for i in range(1, L):
+        W = weights['W{}'.format(i)]
+        b = weights['b{}'.format(i)]
+        D = outputs['D{}'.format(i)] = np.random.binomial(
             1, keep_prob, size=(W.shape[0], A.shape[1]))
-        A = outputs['A{}'.format(layer)] = tanh(W @ A + b) * D / keep_prob
+        A = outputs['A{}'.format(i)] = tanh(W @ A + b) * D / keep_prob
     W = weights['W{}'.format(L)]
     b = weights['b{}'.format(L)]
     A = outputs['A{}'.format(L)] = softmax(W @ A + b)
