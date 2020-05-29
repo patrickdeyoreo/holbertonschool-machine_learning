@@ -39,15 +39,15 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
     m = Y.shape[1]
     A = cache['A{}'.format(L)]
     dZ = A - Y
-    for layer in reversed(range(1, L)):
-        D = cache['D{}'.format(layer)]
-        A = cache['A{}'.format(layer)]
-        W = weights['W{}'.format(layer + 1)]
-        dW = dZ @ A.T / keep_prob / m
+    for i in reversed(range(1, L)):
+        A = cache['A{}'.format(i)]
+        D = cache['D{}'.format(i)]
+        W = weights['W{}'.format(i+1)]
+        dW = dZ @ A.T / m
         db = np.sum(dZ, axis=1, keepdims=True) / m
-        dZ = W.T @ dZ * tanh_prime(A) * D
-        weights['W{}'.format(layer + 1)] -= alpha * dW
-        weights['b{}'.format(layer + 1)] -= alpha * db
+        dZ = W.T @ dZ * tanh_prime(A) * D / keep_prob
+        weights['W{}'.format(i+1)] -= alpha * dW
+        weights['b{}'.format(i+1)] -= alpha * db
     A = cache['A0']
     dW = dZ @ A.T / m
     db = np.sum(dZ, axis=1, keepdims=True) / m
