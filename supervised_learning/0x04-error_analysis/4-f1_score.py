@@ -18,6 +18,6 @@ def f1_score(confusion):
         np.ndarray of shape (classes,) containing the F1 score of each class
     """
     TP = np.diagonal(confusion)
-    P = np.sum(confusion, axis=0)
+    TP_FP = np.sum(confusion, axis=0)
     TP_FN = np.sum(confusion, axis=1)
-    return 2 * TP / (P + TP_FN)
+    return 2 * TP / (TP_FP + TP_FN)

@@ -19,7 +19,7 @@ def create_confusion_matrix(labels, logits):
         representing the correct labels and column indices representing the
         predicted labels
     """
-    confusion_matrix = np.zeros((labels.shape[1], labels.shape[1]))
+    confusion = np.zeros((labels.shape[1], labels.shape[1]))
     for true, pred in zip(labels, logits):
-        confusion_matrix[true.argmax()][pred.argmax()] += 1
-    return confusion_matrix
+        confusion[true.argmax()][pred.argmax()] += 1
+    return confusion

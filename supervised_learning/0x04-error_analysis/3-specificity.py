@@ -14,10 +14,10 @@ def specificity(confusion):
     Return:
         np.ndarray of shape (classes,) containing the specificity of each class
     """
+    total = np.sum(confusion)
     TP = np.diagonal(confusion)
-    P = np.sum(confusion, axis=0)
+    TP_FP = np.sum(confusion, axis=0)
     TP_FN = np.sum(confusion, axis=1)
-    FP = P - TP
-    TP_F = TP_FN + FP
-    TN = np.sum(confusion) - TP_F
+    FP = TP_FP - TP
+    TN = total - FP - TP_FN
     return TN / (TN + FP)
