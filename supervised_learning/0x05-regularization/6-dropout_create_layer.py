@@ -8,7 +8,7 @@ import tensorflow as tf
 
 def dropout_create_layer(prev, n, activation, keep_prob):
     """
-    Creates a tensorflow layer using dropout
+    Creates a tensorflow layer with dropout
     Arguments:
         prev: a tensor containing the output of the previous layer
         n: the number of nodes the new layer should contain
@@ -17,10 +17,10 @@ def dropout_create_layer(prev, n, activation, keep_prob):
     Return:
         the output of the new layer
     """
-    init = tf.contrib.layers.variance_scaling_initializer(
-        mode='FAN_AVG')
-    layer = tf.layers.Dense(
-        units=n, activation=activation, kernel_initializer=init, name='layer')
-    dropout = tf.layers.Dropout(
-        rate=1-keep_prob, name='dropout')
-    return dropout(layer(prev))
+    init = tf.contrib.layers.variance_scaling_initializer(mode='FAN_AVG')
+    drop = tf.layers.Dropout(1-keep_prob)
+    layer = tf.layers.Dense(units=n,
+                            activation=activation,
+                            kernel_initializer=init,
+                            name='layer')
+    return drop(layer(prev))
