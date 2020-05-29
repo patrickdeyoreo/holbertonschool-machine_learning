@@ -37,11 +37,11 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     """
     m = Y.shape[1]
     dZ = cache['A{}'.format(L)] - Y
-    for layer in reversed(range(L)):
-        A = cache['A{}'.format(layer)]
-        W = weights['W{}'.format(layer + 1)]
+    for i in reversed(range(L)):
+        A = cache['A{}'.format(i)]
+        W = weights['W{}'.format(i+1)]
         dW = dZ @ A.T / m + lambtha * W / m
         db = np.sum(dZ, axis=1, keepdims=True) / m
         dZ = W.T @ dZ * tanh_prime(A)
-        weights['W{}'.format(layer + 1)] -= alpha * dW
-        weights['b{}'.format(layer + 1)] -= alpha * db
+        weights['W{}'.format(i+1)] -= alpha * dW
+        weights['b{}'.format(i+1)] -= alpha * db

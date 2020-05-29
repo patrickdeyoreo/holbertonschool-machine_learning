@@ -37,8 +37,7 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
         L: the number of layers in the network
     """
     m = Y.shape[1]
-    A = cache['A{}'.format(L)]
-    dZ = A - Y
+    dZ = cache['A{}'.format(L)] - Y
     for i in reversed(range(1, L)):
         A = cache['A{}'.format(i)]
         D = cache['D{}'.format(i)]
@@ -48,8 +47,7 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
         dZ = W.T @ dZ * tanh_prime(A) * D / keep_prob
         weights['W{}'.format(i+1)] -= alpha * dW
         weights['b{}'.format(i+1)] -= alpha * db
-    A = cache['A0']
-    dW = dZ @ A.T / m
+    dW = dZ @ cache['A0'].T / m
     db = np.sum(dZ, axis=1, keepdims=True) / m
     weights['W1'] -= alpha * dW
     weights['b1'] -= alpha * db

@@ -34,8 +34,10 @@ def tanh(X):
 def dropout_forward_prop(X, weights, L, keep_prob):
     """
     Performs forward propagation of a neural network using Dropout
-    All layers except the last use the tanh activation function
-    The last layer should uses softmax activation function
+
+    The neural network uses tanh activations on each layer except the last,
+    which uses a softmax activation
+
     Arguments:
         X: a numpy.ndarray of shape (nx, m) containing the input data, where
            nx is the number of input features, and
