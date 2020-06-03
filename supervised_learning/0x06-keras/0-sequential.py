@@ -19,14 +19,17 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
         the keras model
     """
     model = K.Sequential()
-    pairs = zip(layers, activations)
-    units, activation = next(pairs)
-    kwgs = dict(activation=activation,
-                kernel_regularizer=K.regularizers.l2(lambtha))
-    model.add(K.layers.Dense(units, input_shape=(nx,), **kwgs))
-    for units, activation in pairs:
+    items = zip(layers, activations)
+    first = next(items, None)
+    if first is not None:
+        units, activation = first
+        model.add(K.layers.Dense(
+            units, activation=activation,
+            kernel_regularizer=K.regularizers.l2(lambtha),
+            input_dim=nx))
+    for units, activation in items:
         model.add(K.layers.Dropout(1 - keep_prob))
-        kwgs.update(activation=activation,
-                    kernel_regularizer=K.regularizers.l2(lambtha))
-        model.add(K.layers.Dense(units, **kwgs))
+        model.add(K.layers.Dense(
+            units, activation=activation,
+            kernel_regularizer=K.regularizers.l2(lambtha)))
     return model
