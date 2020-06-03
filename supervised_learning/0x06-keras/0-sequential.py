@@ -2,7 +2,6 @@
 """
 Provides a function that builds a neural network with the Keras library
 """
-# pylint: disable=import-error,invalid-name
 import tensorflow.keras as K
 
 
