@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-# pylint: disable=import-error,invalid-name
 """
 Provides a function that builds a neural network with the Keras library
 """
+# pylint: disable=invalid-name
 import tensorflow.keras as K
 
 
