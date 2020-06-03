@@ -2,7 +2,7 @@
 """
 Provides a function that builds a neural network with the Keras library
 """
-# pylint: disable=import-error,invalid-name
+# pylint: disable=invalid-name
 import tensorflow.keras as K
 
 
@@ -18,15 +18,15 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     Return:
         the keras model
     """
-    inputs = K.Input(shape=(nx,))
-    pairs = zip(layers, activations)
-    units, activation = next(pairs)
-    kwgs = dict(activation=activation,
-                kernel_regularizer=K.regularizers.l2(lambtha))
-    outputs = K.layers.Dense(units, **kwgs)(inputs)
-    for units, activation in pairs:
+    inputs = outputs = K.Input(shape=(nx,))
+    items = zip(layers, activations)
+    first = next(items, None)
+    if first is not None:
+        kwgs = dict(kernel_regularizer=K.regularizers.l2(lambtha))
+        units, kwgs['activation'] = first
+        outputs = K.layers.Dense(units, **kwgs)(outputs)
+    for units, kwgs['activation'] in items:
         outputs = K.layers.Dropout(1 - keep_prob)(outputs)
-        kwgs.update(activation=activation,
-                    kernel_regularizer=K.regularizers.l2(lambtha))
+        kwgs.update(kernel_regularizer=K.regularizers.l2(lambtha))
         outputs = K.layers.Dense(units, **kwgs)(outputs)
     return K.Model(inputs=inputs, outputs=outputs)

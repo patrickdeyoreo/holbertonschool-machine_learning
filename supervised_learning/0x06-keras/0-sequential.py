@@ -22,14 +22,11 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     items = zip(layers, activations)
     first = next(items, None)
     if first is not None:
-        units, activation = first
-        model.add(K.layers.Dense(
-            units, activation=activation,
-            kernel_regularizer=K.regularizers.l2(lambtha),
-            input_dim=nx))
-    for units, activation in items:
+        kwgs = dict(kernel_regularizer=K.regularizers.l2(lambtha))
+        units, kwgs['activation'] = next(items)
+        model.add(K.layers.Dense(units, input_dim=nx, **kwgs))
+    for units, kwgs['activation'] in items:
         model.add(K.layers.Dropout(1 - keep_prob))
-        model.add(K.layers.Dense(
-            units, activation=activation,
-            kernel_regularizer=K.regularizers.l2(lambtha)))
+        kwgs.update(kernel_regularizer=K.regularizers.l2(lambtha))
+        model.add(K.layers.Dense(units, **kwgs))
     return model
