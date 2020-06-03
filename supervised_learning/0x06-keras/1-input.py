@@ -18,7 +18,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     Return:
         the keras model
     """
-    inputs = outputs = K.Input(shape=(nx,))
+    outputs = inputs = K.Input(shape=(nx,))
     items = zip(layers, activations)
     first = next(items, None)
     if first is not None:

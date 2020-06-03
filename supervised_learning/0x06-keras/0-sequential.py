@@ -23,8 +23,8 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     first = next(items, None)
     if first is not None:
         kwgs = dict(kernel_regularizer=K.regularizers.l2(lambtha))
-        units, kwgs['activation'] = next(items)
-        model.add(K.layers.Dense(units, input_dim=nx, **kwgs))
+        units, kwgs['activation'] = first
+        model.add(K.layers.Dense(units, **kwgs, input_dim=nx))
     for units, kwgs['activation'] in items:
         model.add(K.layers.Dropout(1 - keep_prob))
         kwgs.update(kernel_regularizer=K.regularizers.l2(lambtha))
