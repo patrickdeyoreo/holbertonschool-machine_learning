@@ -12,7 +12,7 @@ def train_model(
     """
     Trains a keras model using mini-batch gradient descent
     Arguments:
-        model: the model to train
+        network: the model to train
         data: a numpy.ndarray of shape (m, nx) containing the input data
         labels: a one-hot numpy.ndarray of shape (m, classes) containing labels
         batch_size: the size of each batch of mini-batch gradient descent
@@ -22,4 +22,4 @@ def train_model(
     Return:
         the History object produced by training the model
     """
-    return model.fit(**locals())
+    return network.fit(**locals())
