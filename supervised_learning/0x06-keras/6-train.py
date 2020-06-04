@@ -27,9 +27,11 @@ def train_model(
         the History object produced by training the model
     """
     callbacks = []
-    if early_stopping and validation_data is not None:
-        callbacks.append(K.callbacks.EarlyStopping(patience=patience))
+    if validation_data is not None and early_stopping:
+        early_stopping = K.callbacks.EarlyStopping(patience=patience)
+        callbacks.append(early_stopping)
+
     return network.fit(
         x=data, y=labels, batch_size=batch_size, epochs=epochs,
-        callbacks=callbacks, validation_data=validation_data,
+        callbacks=callbacks or None, validation_data=validation_data,
         verbose=verbose, shuffle=shuffle)
