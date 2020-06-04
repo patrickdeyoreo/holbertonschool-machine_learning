@@ -27,10 +27,16 @@ def train_model(
     Return:
         the History object produced by training the model
     """
-    if early_stopping:
-        callbacks = [K.callbacks.EarlyStopping(patience=patience)]
-    else:
-        callbacks = None
+    def scheduler(epoch):
+        """Takes an epoch index and returns a learning rate"""
+        return alpha / (1 + decay_rate * epoch)
+
+    callbacks = []
+    if validation_data is not None and early_stopping:
+        callbacks.append(K.callbacks.EarlyStopping(patience=patience))
+    if validation_data is not None and learning_rate_decay:
+        callbacks.append(K.callbacks.LearningRateScheduler(scheduler))
+
     return network.fit(
         x=data, y=labels, batch_size=batch_size, epochs=epochs,
         callbacks=callbacks, validation_data=validation_data,

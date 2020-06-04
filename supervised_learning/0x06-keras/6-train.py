@@ -26,10 +26,9 @@ def train_model(
     Return:
         the History object produced by training the model
     """
-    if early_stopping:
-        callbacks = [K.callbacks.EarlyStopping(patience=patience)]
-    else:
-        callbacks = None
+    callbacks = []
+    if early_stopping and validation_data is not None:
+        callbacks.append(K.callbacks.EarlyStopping(patience=patience))
     return network.fit(
         x=data, y=labels, batch_size=batch_size, epochs=epochs,
         callbacks=callbacks, validation_data=validation_data,
