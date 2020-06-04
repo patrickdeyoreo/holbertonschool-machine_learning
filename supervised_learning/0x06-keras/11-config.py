@@ -13,8 +13,9 @@ def save_cofig(network, filename):
         network: the model of which to save the config
         filename: the path at which to save the config
     """
+    config = network.to_json()
     with open(filename, 'w') as ostream:
-        ostream.write(network.to_json())
+        ostream.write(config)
 
 
 def load_config(filename):
@@ -25,8 +26,5 @@ def load_config(filename):
     Return:
         the loaded model
     """
-    try:
-        with open(filename, 'r') as istream:
-            return K.models.model_from_json(istream.read())
-    except FileNotFoundError:
-        return None
+    with open(filename, 'r') as istream:
+        return K.models.model_from_json(istream.read())
