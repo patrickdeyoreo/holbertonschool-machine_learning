@@ -27,7 +27,7 @@ def train_model(
         the History object produced by training the model
     """
     callbacks = []
-    if validation_data is not None and early_stopping and patience < epochs:
+    if validation_data is not None and early_stopping:
         callbacks.append(
             K.callbacks.EarlyStopping(monitor='val_loss', patience=patience))
 
