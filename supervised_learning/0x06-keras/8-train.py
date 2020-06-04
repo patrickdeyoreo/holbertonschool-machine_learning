@@ -34,7 +34,7 @@ def train_model(
         return alpha / (1 + decay_rate * epoch)
 
     callbacks = []
-    if validation_data is not None and early_stopping:
+    if validation_data is not None and early_stopping and patience < epochs:
         callbacks.append(
             K.callbacks.EarlyStopping(monitor='val_loss', patience=patience))
     if validation_data is not None and learning_rate_decay:
