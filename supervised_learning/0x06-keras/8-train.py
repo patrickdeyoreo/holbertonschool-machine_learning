@@ -22,6 +22,8 @@ def train_model(
         validation_data: the data to validate the model with
         early_stopping: whether or not to end training upon diminishing returns
         patience: the number of insufficient passes to allow before stopping
+        save_best: whether or not to save the best iteration of the model
+        filepath: the path at which the model should be saved
         verbose: whether or not output should be printed during training
         shuffle: whether or not to shuffle batches every epoch
     Return:
@@ -33,13 +35,16 @@ def train_model(
 
     callbacks = []
     if validation_data is not None and early_stopping:
-        early_stopping = K.callbacks.EarlyStopping(patience=patience)
-        callbacks.append(early_stopping)
+        callbacks.append(
+            K.callbacks.EarlyStopping(monitor='val_loss', patience=patience))
     if validation_data is not None and learning_rate_decay:
-        learning_rate = K.callbacks.LearningRateScheduler(scheduler, verbose=1)
-        callbacks.append(learning_rate)
+        callbacks.append(
+            K.callbacks.LearningRateScheduler(scheduler, verbose=1))
+    if save_best:
+        callbacks.append(
+            K.callbacks.ModelCheckpoint(filepath, save_best_only=True))
 
     return network.fit(
         x=data, y=labels, batch_size=batch_size, epochs=epochs,
-        callbacks=callbacks or None, validation_data=validation_data,
+        callbacks=callbacks, validation_data=validation_data,
         verbose=verbose, shuffle=shuffle)
