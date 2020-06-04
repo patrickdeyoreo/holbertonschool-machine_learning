@@ -14,7 +14,7 @@ def save_cofig(network, filename):
         filename: the path at which to save the config
     """
     with open(filename, 'w') as ostream:
-        print(network.to_json(), file=ostream)
+        ostream.write(network.to_json())
 
 
 def load_config(filename):
