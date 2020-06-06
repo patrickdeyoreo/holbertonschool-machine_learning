@@ -44,7 +44,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     elif padding == 'valid':
         hp = wp = 0
 
-    images = np.pad(images, pad_width=((0,), (hp,), (wp,)), mode='constant')
+    images = np.pad(images, ((0,), (hp,), (wp,), (0,)), mode='constant')
     h = (h - hk + 2 * hp) // hs + 1
     w = (w - wk + 2 * wp) // ws + 1
     convolved = np.zeros(shape=(m, h, w))
@@ -52,6 +52,6 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         for col in range(w):
             rows = slice(row * hs, row * hs + hk)
             cols = slice(col * ws, col * ws + wk)
-            part = images[:, rows, cols, :]
-            convolved[:, row, col, :] = np.sum(part * kernel, axis=(1, 2, 3))
+            part = images[:, rows, cols]
+            convolved[:, row, col] = np.sum(part * kernel, axis=(1, 2, 3))
     return convolved
