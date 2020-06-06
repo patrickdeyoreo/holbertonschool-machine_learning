@@ -28,7 +28,7 @@ def convolve_grayscale_valid(images, kernel):
 
     for row in range(h_c):
         for col in range(w_c):
-            xy = images[:, row:(row + h_k), col:(col + w_k)]
-            convolution[:, row, col] = np.sum(xy, axis=(1, 2))
+            part = images[:, row:(row + h_k), col:(col + w_k)]
+            convolution[:, row, col] = np.sum(part * kernel, axis=(1, 2))
 
     return convolution
