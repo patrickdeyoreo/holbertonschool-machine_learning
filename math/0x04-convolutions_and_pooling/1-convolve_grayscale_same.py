@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Provides a function to perform a valid convolution on grayscale images
+Provides a function to perform a same convolution on grayscale images
 """
 # pylint: disable=invalid-name
 import numpy as np
@@ -8,7 +8,7 @@ import numpy as np
 
 def convolve_grayscale_valid(images, kernel):
     """
-    Performs a valid convolution on grayscales images
+    Performs a same convolution on grayscales images
     Arguments:
         images: a np.ndarray of shape (m, h, w) of grayscale images, where
                 m is the number of images,
@@ -22,12 +22,13 @@ def convolve_grayscale_valid(images, kernel):
     """
     m, h, w = images.shape
     h_k, w_k = kernel.shape
-    h_c = h - h_k + 1
-    w_c = w - w_k + 1
-    convolved = np.zeros(shape=(m, h_c, w_c))
+    h_p = (h_k - 1) // 2 + 1
+    w_p = (w_k - 1) // 2 + 1
+    images = np.pad(images, ((0,), (h_p,), (w_p,)), mode='constant')
+    convolved = np.zeros(shape=(m, h, w))
 
-    for row in range(h_c):
-        for col in range(w_c):
+    for row in range(h):
+        for col in range(w):
             part = images[:, row:(row + h_k), col:(col + w_k)]
             convolved[:, row, col] = np.sum(part * kernel, axis=(1, 2))
 
