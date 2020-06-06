@@ -24,7 +24,7 @@ def convolve_grayscale_valid(images, kernel):
     h_k, w_k = kernel.shape
     h_c = h - h_k + 1
     w_c = w - w_k + 1
-    convolution = np.zeros(shape=(m, h_c, w_c), dtype=int)
+    convolution = np.zeros(shape=(m, h_c, w_c))
 
     for row in range(h_c):
         for col in range(w_c):
