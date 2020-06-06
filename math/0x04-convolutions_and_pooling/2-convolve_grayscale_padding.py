@@ -14,24 +14,23 @@ def convolve_grayscale_padding(images, kernel, padding):
                 m is the number of images,
                 h is the height in pixels of the images, and
                 w is the width in pixels of the images
-        kernel: a np.ndarray with shape (h_k, w_k) containing the kernel, where
-                h_k is the height of the kernel, and
-                w_k is the width of the kernel
-        padding: a tuple of (h_p, w_p), where
-                 h_p is the padding for the height of the image, and
-                 w_p is the padding for the width of the image
+        kernel: a np.ndarray with shape (hk, wk) containing the kernel, where
+                hk is the height of the kernel, and
+                wk is the width of the kernel
+        padding: a tuple of (hp, wp), where
+                 hp is the padding for the height of the image, and
+                 wp is the padding for the width of the image
     Return:
         a numpy.ndarray containing the convolved images
     """
-    (m, h, w), (h_k, w_k), (h_p, w_p) = images.shape, kernel.shape, padding
+    (m, h, w), (hk, wk), (hp, wp) = images.shape, kernel.shape, padding
 
-    images = np.pad(images, pad_width=((0,), (h_p,), (w_p,)), mode='constant')
-    h = h - h_k + 2 * h_p + 1
-    w = w - w_k + 2 * w_p + 1
+    images = np.pad(images, pad_width=((0,), (hp,), (wp,)), mode='constant')
+    h = h - hk + 2 * hp + 1
+    w = w - wk + 2 * wp + 1
     convolved = np.zeros(shape=(m, h, w))
-
     for row in range(h):
         for col in range(w):
-            part = images[:, row:(row + h_k), col:(col + w_k)]
+            part = images[:, row:(row + hk), col:(col + wk)]
             convolved[:, row, col] = np.sum(part * kernel, axis=(1, 2))
     return convolved
