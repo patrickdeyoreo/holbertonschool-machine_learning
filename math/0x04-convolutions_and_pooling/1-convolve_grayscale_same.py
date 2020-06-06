@@ -6,7 +6,7 @@ Provides a function to perform a same convolution on grayscale images
 import numpy as np
 
 
-def convolve_grayscale_valid(images, kernel):
+def convolve_grayscale_same(images, kernel):
     """
     Performs a same convolution on grayscales images
     Arguments:
@@ -22,10 +22,10 @@ def convolve_grayscale_valid(images, kernel):
     """
     m, h, w = images.shape
     h_k, w_k = kernel.shape
+    convolved = np.zeros(shape=(m, h, w))
     h_p = (h_k - 1) // 2 + 1
     w_p = (w_k - 1) // 2 + 1
     images = np.pad(images, ((0,), (h_p,), (w_p,)), mode='constant')
-    convolved = np.zeros(shape=(m, h, w))
 
     for row in range(h):
         for col in range(w):
