@@ -28,29 +28,25 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     Return:
         a np.ndarray containing the convolved images
     """
-    m, h, w = images.shape
-    h_k, w_k = kernel.shape
-    h_s, w_s = stride
+    (m, h, w), (h_k, w_k), (h_s, w_s) = images.shape, kernel.shape, stride
 
     if isinstance(padding, tuple):
         h_p, w_p = padding
-        images = np.pad(images, ((0,), (h_p,), (w_p,)), mode='constant')
     elif padding == 'same':
-        h_p = int(np.ceil((h_s * (h - 1) + h_k - h) / 2))
-        w_p = int(np.ceil((w_s * (w - 1) + w_k - w) / 2))
-        images = np.pad(images, ((0,), (h_p,), (w_p,)), mode='constant')
+        h_p = ((h_s - 1) * h - h_s + h_k + 1) // 2
+        w_p = ((w_s - 1) * w - w_s + w_k + 1) // 2
     elif padding == 'valid':
         h_p = w_p = 0
 
-    h_c = int((h - h_k + 2 * h_p) / h_s + 1)
-    w_c = int((w - w_k + 2 * w_p) / w_s + 1)
-    convolved = np.zeros(shape=(m, h_c, w_c))
+    images = np.pad(images, pad_width=((0,), (h_p,), (w_p,)), mode='constant')
+    h = (h - h_k + 2 * h_p) // h_s + 1
+    w = (w - w_k + 2 * w_p) // w_s + 1
+    convolved = np.zeros(shape=(m, h, w))
 
-    for row in range(h_c):
-        for col in range(w_c):
+    for row in range(h):
+        for col in range(w):
             rows = slice(row * h_s, row * h_s + h_k)
             cols = slice(col * w_s, col * w_s + w_k)
             part = images[:, rows, cols]
             convolved[:, row, col] = np.sum(part * kernel, axis=(1, 2))
-
     return convolved
