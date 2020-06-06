@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Provides a function to perform a convolution on grayscale images with padding
+Provides a function to perform a convolution on images
 """
 # pylint: disable=invalid-name
 import numpy as np
 
 
-def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
+def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     """
-    Performs a same convolution on grayscales images
+    Performs a convolution on images
     Arguments:
         images:
             a numpy.ndarray of shape (m, h, w, c) containing images, where
