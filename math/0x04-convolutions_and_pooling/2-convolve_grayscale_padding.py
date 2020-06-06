@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Provides a function to perform a same convolution on grayscale images
+Provides a function to perform a convolution on grayscale images with padding
 """
 # pylint: disable=invalid-name
 import numpy as np
@@ -17,17 +17,17 @@ def convolve_grayscale_padding(images, kernel, padding):
         kernel: a np.ndarray with shape (h_k, w_k) containing the kernel, where
                 h_k is the height of the kernel, and
                 w_k is the width of the kernel
-        padding: a tuple of (ph, pw), where
-                 ph is the padding for the height of the image, and
-                 pw is the padding for the width of the image
+        padding: a tuple of (h_p, w_p), where
+                 h_p is the padding for the height of the image, and
+                 w_p is the padding for the width of the image
     Return:
         a numpy.ndarray containing the convolved images
     """
     m, h, w = images.shape
     h_k, w_k = kernel.shape
     convolved = np.zeros(shape=(m, h, w))
-    h_p = int(np.ceil((h_k - 1) / 2))
-    w_p = int(np.ceil((w_k - 1) / 2))
+
+    h_p, w_p = padding
     images = np.pad(images, ((0,), (h_p,), (w_p,)), mode='constant')
 
     for row in range(h):
