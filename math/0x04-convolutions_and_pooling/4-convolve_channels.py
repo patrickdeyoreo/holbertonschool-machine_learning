@@ -10,31 +10,30 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     """
     Performs a convolution on images
     Arguments:
-        images:
-            a numpy.ndarray of shape (m, h, w, c) containing images, where
+        images: a numpy.ndarray of shape (m, h, w, c) containing images, where
             m is the number of images,
             h is the height in pixels of each image,
             w is the width in pixels of each image,
             c is the number of channels in each image
-        kernel:
-            a numpy.ndarray of shape (hk, wk, c) containing the kernel, where
+        kernel: a numpy.ndarray of shape (hk, wk, c) containing a kernel, where
             hk is the height in pixels of the kernel,
             wk is the width in pixels of the kernel,
             c is the number of channels in each image
-        padding:
-            either ‘same’, ‘valid’, or a tuple of (hp, wp), where
+        padding: either ‘same’, ‘valid’, or a tuple of (hp, wp), where
             ‘same’ performs a same convolution,
             ‘valid’ performs a valid convolution,
             hp is the height of the padding for each image,
             wp is the width of the padding for each image
-        stride:
-            a tuple of (hs, ws), where
+        stride: a tuple of (hs, ws), where
             hs is the height of the stride for each image,
             ws is the width of the stride for each image
     Return:
         a numpy.ndarray containing the convolved images
     """
-    (m, h, w, _), (hk, wk, _), (hs, ws) = images.shape, kernel.shape, stride
+    # pylint: disable=too-many-locals
+    m, h, w, _ = images.shape
+    hk, wk, _ = kernel.shape
+    hs, ws = stride
 
     if isinstance(padding, tuple):
         hp, wp = padding
