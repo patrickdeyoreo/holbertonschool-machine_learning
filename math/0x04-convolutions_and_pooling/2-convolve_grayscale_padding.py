@@ -6,7 +6,7 @@ Provides a function to perform a same convolution on grayscale images
 import numpy as np
 
 
-def convolve_grayscale_same(images, kernel):
+def convolve_grayscale_padding(images, kernel, padding):
     """
     Performs a same convolution on grayscales images
     Arguments:
@@ -17,6 +17,9 @@ def convolve_grayscale_same(images, kernel):
         kernel: a np.ndarray with shape (h_k, w_k) containing the kernel, where
                 h_k is the height of the kernel, and
                 w_k is the width of the kernel
+        padding: a tuple of (ph, pw), where
+                 ph is the padding for the height of the image, and
+                 pw is the padding for the width of the image
     Return:
         a numpy.ndarray containing the convolved images
     """
