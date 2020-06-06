@@ -23,8 +23,8 @@ def convolve_grayscale_same(images, kernel):
     m, h, w = images.shape
     h_k, w_k = kernel.shape
     convolved = np.zeros(shape=(m, h, w))
-    h_p = np.ceil((h_k - 1) / 2, dtype=int)
-    w_p = np.ceil((w_k - 1) / 2, dtype=int)
+    h_p = int(np.ceil((h_k - 1) / 2))
+    w_p = int(np.ceil((w_k - 1) / 2))
     images = np.pad(images, ((0,), (h_p,), (w_p,)), mode='constant')
 
     for row in range(h):
