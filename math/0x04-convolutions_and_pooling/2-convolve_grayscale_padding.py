@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Provides a function to perform a convolution on grayscale images with custom padding
+Provides a function to perform a convolution on grayscale images with padding
 """
 # pylint: disable=invalid-name
 import numpy as np
@@ -23,6 +23,7 @@ def convolve_grayscale_padding(images, kernel, padding):
     Return:
         a np.ndarray containing the convolved images
     """
+    # pylint: disable=too-many-locals
     (m, h, w), (hk, wk), (hp, wp) = images.shape, kernel.shape, padding
 
     images = np.pad(images, pad_width=((0,), (hp,), (wp,)), mode='constant')

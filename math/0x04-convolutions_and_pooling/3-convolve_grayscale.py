@@ -29,6 +29,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     Return:
         a np.ndarray containing the convolved images
     """
+    # pylint: disable=too-many-locals
     (m, h, w), (hk, wk), (hs, ws) = images.shape, kernel.shape, stride
 
     if isinstance(padding, tuple):
