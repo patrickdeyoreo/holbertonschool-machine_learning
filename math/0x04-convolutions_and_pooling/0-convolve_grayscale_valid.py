@@ -12,7 +12,7 @@ def convolve_grayscale_valid(images, kernel):
     Arguments:
         images: a np.ndarray of shape (m, h, w) of images, where
                 m is the number of images,
-                h is the height in pixels of the images, 
+                h is the height in pixels of the images,
                 w is the width in pixels of the images
         kernel: a np.ndarray of shape (hk, wk) as the kernel, where
                 hk is the height in pixels of the kernel,
@@ -21,7 +21,7 @@ def convolve_grayscale_valid(images, kernel):
         a np.ndarray containing the convolved images
     """
     (m, h, w), (hk, wk) = images.shape, kernel.shape
-    
+
     h = h - hk + 1
     w = w - wk + 1
     conv = np.zeros(shape=(m, h, w))
