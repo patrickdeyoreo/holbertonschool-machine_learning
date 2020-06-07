@@ -20,7 +20,7 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
                 wk is the width in pixels of the kernel
         padding: either ‘same’, ‘valid’, or a tuple (hp, wp), where
                 ‘same’ produces a same convolution,
-               ‘valid’ produces a valid convolution,
+                ‘valid’ produces a valid convolution,
                 hp is the height in pixels of the padding,
                 wp is the width in pixels of the padding
         stride: a tuple (hs, ws) as the stride, where
