@@ -10,21 +10,22 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     """
     Performs a convolution on grayscales images
     Arguments:
-        images: a np.ndarray of shape (m, h, w) of grayscale images, where
+        images: a np.ndarray of shape (m, h, w) of images, where
                 m is the number of images,
-                h is the height in pixels of the images, and
+                h is the height in pixels of the images,
                 w is the width in pixels of the images
-        kernel: a np.ndarray with shape (hk, wk) containing the kernel, where
-                hk is the height of the kernel, and
-                wk is the width of the kernel
-        padding: either a tuple of (hp, wp), ‘same’, or ‘valid’, where
-                 ‘same’ performs a same convolution,
-                 ‘valid’ performs a valid convolution,
-                 hp is the padding for the height of the image, and
-                 wp is the padding for the width of the image
-        stride: a tuple of (hs, ws), where
-                hs is the stride for the height of the image
-                ws is the stride for the width of the image
+        kernel: a np.ndarray with shape (hk, wk) as the kernel, where
+                a np.ndarray of shape (hk, wk, c) as the kernel, where
+                hk is the height in pixels of the kernel,
+                wk is the width in pixels of the kernel
+        padding: either ‘same’, ‘valid’, or a tuple (hp, wp), where
+                ‘same’ produces a same convolution,
+               ‘valid’ produces a valid convolution,
+                hp is the height in pixels of the padding,
+                wp is the width in pixels of the padding
+        stride: a tuple (hs, ws) as the stride, where
+                hs is the height in pixels of the stride,
+                ws is the width in pixels of the stride
     Return:
         a np.ndarray containing the convolved images
     """
@@ -41,11 +42,11 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
     images = np.pad(images, pad_width=((0,), (hp,), (wp,)), mode='constant')
     h = (h - hk + 2 * hp) // hs + 1
     w = (w - wk + 2 * wp) // ws + 1
-    convolved = np.zeros(shape=(m, h, w))
+    conv = np.zeros(shape=(m, h, w))
     for row in range(h):
         for col in range(w):
             rows = slice(row * hs, row * hs + hk)
             cols = slice(col * ws, col * ws + wk)
-            part = images[:, rows, cols]
-            convolved[:, row, col] = np.sum(part * kernel, axis=(1, 2))
-    return convolved
+            part = images[:, rows, cols] * kernel
+            conv[:, row, col] = np.sum(part, axis=(1, 2))
+    return conv

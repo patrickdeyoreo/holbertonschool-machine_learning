@@ -10,24 +10,26 @@ def convolve_grayscale_same(images, kernel):
     """
     Performs a same convolution on grayscales images
     Arguments:
-        images: a np.ndarray of shape (m, h, w) of grayscale images, where
+        images: a np.ndarray of shape (m, h, w) of images, where
                 m is the number of images,
-                h is the height in pixels of the images, and
+                h is the height in pixels of the images,
                 w is the width in pixels of the images
-        kernel: a np.ndarray with shape (hk, wk) containing the kernel, where
-                hk is the height of the kernel, and
-                wk is the width of the kernel
+        kernel: a np.ndarray with shape (hk, wk) as the kernel, where
+                hk is the height in pixels of the kernel,
+                wk is the width in pixels of the kernel
     Return:
-        a numpy.ndarray containing the convolved images
+        a np.ndarray containing the convolved images
     """
     (m, h, w), (hk, wk) = images.shape, kernel.shape
 
     hp = hk // 2
     wp = wk // 2
     images = np.pad(images, pad_width=((0,), (hp,), (wp,)), mode='constant')
-    convolved = np.zeros(shape=(m, h, w))
+    conv = np.zeros(shape=(m, h, w))
     for row in range(h):
         for col in range(w):
-            part = images[:, row:(row + hk), col:(col + wk)]
-            convolved[:, row, col] = np.sum(part * kernel, axis=(1, 2))
-    return convolved
+            rows = slice(row, row + hk)
+            cols = slice(col, col + wk)
+            part = images[:, rows, cols] * kernel
+            conv[:, row, col] = np.sum(part, axis=(1, 2))
+    return conv
