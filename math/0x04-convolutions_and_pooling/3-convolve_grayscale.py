@@ -15,7 +15,6 @@ def convolve_grayscale(images, kernel, padding='same', stride=(1, 1)):
                 h is the height in pixels of the images,
                 w is the width in pixels of the images
         kernel: a np.ndarray with shape (hk, wk) as the kernel, where
-                a np.ndarray of shape (hk, wk, c) as the kernel, where
                 hk is the height in pixels of the kernel,
                 wk is the width in pixels of the kernel
         padding: either ‘same’, ‘valid’, or a tuple (hp, wp), where
