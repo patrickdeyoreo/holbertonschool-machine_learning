@@ -1,4 +1,9 @@
 *~
+*.py[cod]
+*.so
 *.sw[op]
-*.pyc
-*.ipynb_checkpoints/
+tags
+.tags
+.DS_Store
+.vscode
+.ipynb_checkpoints/
