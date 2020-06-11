@@ -33,17 +33,15 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     Return:
         the output of the convolutional layer
     """
-    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-arguments,too-many-locals
     m, h, w, _ = A_prev.shape
     hk, wk, _, n = W.shape
     hs, ws = stride
-
     if padding == 'same':
         hp = ((hs - 1) * h - hs + hk + 1) // 2
         wp = ((ws - 1) * w - ws + wk + 1) // 2
     else:
         hp = wp = 0
-
     pad_width = ((0,), (hp,), (wp,), (0,))
     A_prev = np.pad(A_prev, pad_width, mode='constant')
     h = (h - hk + 2 * hp) // hs + 1
