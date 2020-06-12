@@ -32,7 +32,7 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     h_s, w_s = stride
     h_o = (h_i - h_k) // h_s + 1
     w_o = (w_i - w_k) // w_s + 1
-    poolfn = np.mean if mode.lower() == 'avg' else np.max
+    poolfn = np.max if mode.lower() == 'max' else np.mean
     pooled = np.zeros(shape=(m, h_o, w_o, c))
     for i in range(h_o):
         rows = slice(i * h_s, i * h_s + h_k)
