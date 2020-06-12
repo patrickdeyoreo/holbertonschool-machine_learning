@@ -34,15 +34,17 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     m, h_i, w_i, _ = A_prev.shape
     h_k, w_k, _, c_o = W.shape
     h_s, w_s = stride
-    if padding.lower() == 'same':
+
+    if padding == 'same':
         h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
         w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
     else:
         h_p = w_p = 0
+
     A_prev = np.pad(A_prev, ((0,), (h_p,), (w_p,), (0,)), mode='constant')
     h_o = (h_i - h_k + 2 * h_p) // h_s + 1
     w_o = (w_i - w_k + 2 * w_p) // w_s + 1
-    conv = np.zeros(shape=(m, h_o, w_o, c_o))
+    conv = np.zeros(shape=(m, h_o, w_o, c_o)) + b
     for k in range(c_o):
         kern = W[:, :, :, k]
         for j in range(w_o):
@@ -50,5 +52,5 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
             for i in range(h_o):
                 rows = slice(i * h_s, i * h_s + h_k)
                 part = A_prev[:, rows, cols]
-                conv[:, i, j, k] = np.sum(part * kern, axis=(1, 2, 3)) + b
-    return conv if not callable(activation) else activation(conv)
+                conv[:, i, j, k] = np.sum(part * kern, axis=(1, 2, 3))
+    return conv if activation is None else activation(conv)
