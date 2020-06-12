@@ -45,12 +45,12 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     h_o = (h_i - h_k + 2 * h_p) // h_s + 1
     w_o = (w_i - w_k + 2 * w_p) // w_s + 1
     conv = np.zeros(shape=(m, h_o, w_o, c_o)) + b
-    for k in range(c_o):
-        kern = W[:, :, :, k]
-        for j in range(w_o):
-            cols = slice(j * w_s, j * w_s + w_k)
-            for i in range(h_o):
-                rows = slice(i * h_s, i * h_s + h_k)
+    for kern in range(c_o):
+        kernel = W[:, :, :, kern]
+        for row in range(h_o):
+            rows = slice(row * h_s, row * h_s + h_k)
+            for col in range(w_o):
+                cols = slice(col * w_s, col * w_s + w_k)
                 part = A_prev[:, rows, cols]
-                conv[:, i, j, k] = np.sum(part * kern, axis=(1, 2, 3))
+                conv[:, row, col, kern] = np.sum(part * kernel, axis=(1, 2, 3))
     return conv if activation is None else activation(conv)

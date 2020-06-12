@@ -35,10 +35,10 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     w_o = (w_i - w_k) // w_s + 1
     poolfn = np.max if mode == 'max' else np.mean
     pooled = np.zeros(shape=(m, h_o, w_o, c))
-    for i in range(h_o):
-        rows = slice(i * h_s, i * h_s + h_k)
-        for j in range(w_o):
-            cols = slice(j * w_s, j * w_s + w_k)
+    for row in range(h_o):
+        rows = slice(row * h_s, row * h_s + h_k)
+        for col in range(w_o):
+            cols = slice(col * w_s, col * w_s + w_k)
             part = A_prev[:, rows, cols]
-            pooled[:, i, j] = poolfn(part, axis=(1, 2))
+            pooled[:, row, col] = poolfn(part, axis=(1, 2))
     return pooled
