@@ -11,47 +11,46 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     """
     Performs convolutions on images
     Arguments:
-        A_prev: np.ndarray of shape (m, h_prev, w_prev, c_prev) containing
-            the output of the previous layer, where
-            m is the number of examples,
-            h_prev is the height of the previous layer,
-            w_prev is the width of the previous layer,
-            c_prev is the number of channels in the previous layer
-        W: np.ndarray of shape (kh, kw, c_prev, c_new) containing kernels
-            for the convolution, where
-            kh is the filter height,
-            kw is the filter width,
-            c_prev is the number of channels in the previous layer,
-            c_new is the number of channels in the output
-        b: np.ndarray of shape (1, 1, 1, c_new) containing the biases to
-            apply to the convolution
+        A_prev: np.ndarray of shape (m, h_i, w_i, c_i) containing
+                the output of the previous layer, where
+                m is the number of examples,
+                h_i is the height of the previous layer,
+                w_i is the width of the previous layer,
+                c_i is the number of channels in the previous layer
+        W: np.ndarray of shape (h_k, w_k, c_i, c_o) containing kernels, where
+                h_k is the filter height,
+                w_k is the filter width,
+                c_i is the number of channels in the previous layer,
+                c_o is the number of channels in the output
+        b: np.ndarray of shape (1, 1, 1, c_o) containing biases
         activation: an activation function to apply to the convolution
         padding: either 'same' or 'valid', indicating the type of padding
-        stride: a tuple (sh, sw) of the strides for the convolution, where
-            sh is the stride for the height,
-            sw is the stride for the width
+        stride: a tuple (h_s, w_s) of the strides for the convolution, where
+                h_s is the height of the stride,
+                w_s is the width of the stride
     Return:
         the output of the convolutional layer
     """
     # pylint: disable=too-many-arguments,too-many-locals
-    m, h, w, _ = A_prev.shape
-    hk, wk, _, n = W.shape
-    hs, ws = stride
+    m, h_i, w_i, _ = A_prev.shape
+    h_k, w_k, _, c_o = W.shape
+    h_s, w_s = stride
     if padding == 'same':
-        hp = ((hs - 1) * h - hs + hk + 1) // 2
-        wp = ((ws - 1) * w - ws + wk + 1) // 2
+        h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
+        w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
     else:
-        hp = wp = 0
-    pad_width = ((0,), (hp,), (wp,), (0,))
+        h_p = w_p = 0
+    pad_width = ((0,), (h_p,), (w_p,), (0,))
     A_prev = np.pad(A_prev, pad_width, mode='constant')
-    h = (h - hk + 2 * hp) // hs + 1
-    w = (w - wk + 2 * wp) // ws + 1
-    conv = np.zeros(shape=(m, h, w, n)) + b
-    for kern in range(n):
-        for row in range(h):
-            for col in range(w):
-                rows = slice(row * hs, row * hs + hk)
-                cols = slice(col * ws, col * ws + wk)
-                part = A_prev[:, rows, cols] * W[:, :, :, kern]
-                conv[:, row, col, kern] += np.sum(part, axis=(1, 2, 3))
+    h_o = (h_i - h_k + 2 * h_p) // h_s + 1
+    w_o = (w_i - w_k + 2 * w_p) // w_s + 1
+    conv = np.zeros(shape=(m, h_o, w_o, c_o))
+    for k in range(c_o):
+        kern = W[:, :, :, k]
+        for j in range(w_o):
+            cols = slice(j * w_s, j * w_s + w_k)
+            for i in range(h_o):
+                rows = slice(i * h_s, i * h_s + h_k)
+                part = A_prev[:, rows, cols]
+                conv[:, i, j, k] = np.sum(part * kern, axis=(1, 2, 3)) + b
     return conv if activation is None else activation(conv)
