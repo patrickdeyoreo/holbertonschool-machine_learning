@@ -32,7 +32,7 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
                 'max' specifies a max pooling,
                 'avg' specifies a average pooling
     Return:
-        the partial derivatives with respect to the previous layer (dA_prev)
+        the partial derivatives with respect to the previous layer (dX)
     """
     # pylint: disable=too-many-arguments,too-many-locals
 
@@ -41,15 +41,15 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     h_s, w_s = stride
 
     f = np.max if mode == 'max' else np.mean
-    dA_prev = np.zeros(A_prev.shape)
+    dX = np.zeros(A_prev.shape)
 
     for row in range(h):
         rows = slice(row * h_s, row * h_s + h_k)
         for col in range(w):
             cols = slice(col * w_s, col * w_s + w_k)
             A = A_prev[:, rows, cols]
-            X = dA[:, row:row + 1, col:col + 1]
-            Z = f(A, axis=(1, 2), keepdims=True)
-            dA_prev[:, rows, cols] += Z - f(A - X, axis=(1, 2), keepdims=True)
+            X = A - dA[:, row:row + 1, col:col + 1]
+            dX[:, rows, cols] += f(A, axis=(1, 2), keepdims=True)
+            dX[:, rows, cols] -= f(X, axis=(1, 2), keepdims=True)
 
-    return dA_prev
+    return dX
