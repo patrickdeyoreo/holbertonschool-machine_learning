@@ -25,7 +25,7 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
                 c is the number of channels in the output
         activation: an activation function to apply to the convolution, either
                 a callable object or None
-        padding: a string, either 'same' or 'valid', where
+        padding: 'same' or 'valid', indicating the type of convolution, where
                 'same' specifies a same convolution,
                 'valid' specifies a valid convolution
         stride: a tuple (h_s, w_s) specifying the stride size, where
