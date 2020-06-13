@@ -52,12 +52,12 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     else:
         h_p = w_p = 0
 
-    padding = ((0,), (h_p,), (w_p,), (0,))
-    A_prev = np.pad(A_prev, padding, mode='constant')
-
     dA_prev = np.zeros(A_prev.shape)
     dW = np.zeros(W.shape)
     db = np.zeros(b.shape)
+
+    padding = ((0,), (h_p,), (w_p,), (0,))
+    A_prev = np.pad(A_prev, padding, mode='constant')
 
     for row in range(h):
         rows = slice(row * h_s, row * h_s + h_k)
