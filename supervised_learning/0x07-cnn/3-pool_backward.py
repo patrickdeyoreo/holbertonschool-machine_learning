@@ -37,11 +37,10 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     # pylint: disable=too-many-arguments,too-many-locals
 
     _, h, w, _ = dA.shape
-    # _, h_i, w_i, _ = A_prev.shape
     h_k, w_k = kernel_shape
     h_s, w_s = stride
 
-    # f = np.max if mode == 'max' else np.mean
+    f = np.max if mode == 'max' else np.mean
     dA_prev = np.zeros(A_prev.shape)
 
     for row in range(h):
@@ -50,6 +49,7 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
             cols = slice(col * w_s, col * w_s + w_k)
             A = A_prev[:, rows, cols]
             X = dA[:, row:row + 1, col:col + 1]
-            dA_prev[:, rows, cols] += X - A
+            Z = f(A, axis=(1, 2), keepdims=True)
+            dA_prev[:, rows, cols] += f(A + X, axis=(1, 2), keepdims=True) - Z
 
     return dA_prev
