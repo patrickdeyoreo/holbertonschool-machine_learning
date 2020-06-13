@@ -16,14 +16,18 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
                 h_i is the height of the previous layer,
                 w_i is the width of the previous layer,
                 c_i is the number of channels in the previous layer
-        W: np.ndarray of shape (h_k, w_k, c_i, c_o) containing kernels, where
+        W: np.ndarray of shape (h_k, w_k, c_i, c) containing kernels, where
                 h_k is the filter height,
                 w_k is the filter width,
                 c_i is the number of channels in the previous layer,
-                c_o is the number of channels in the output
-        b: np.ndarray of shape (1, 1, 1, c_o) containing biases
-        activation: an activation function to apply to the convolution
-        padding: either 'same' or 'valid', indicating the type of padding
+                c is the number of channels in the output
+        b: np.ndarray of shape (1, 1, 1, c) containing biases, where
+                c is the number of channels in the output
+        activation: an activation function to apply to the convolution, either
+                a callable object or None
+        padding: a string, either 'same' or 'valid', where
+                'same' specifies a same convolution,
+                'valid' specifies a valid convolution
         stride: a tuple (h_s, w_s) specifying the stride size, where
                 h_s is the height of the stride,
                 w_s is the width of the stride
@@ -31,8 +35,9 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
         the output of the convolutional layer
     """
     # pylint: disable=too-many-arguments,too-many-locals
+
     m, h_i, w_i, _ = A_prev.shape
-    h_k, w_k, _, c_o = W.shape
+    h_k, w_k, _, c = W.shape
     h_s, w_s = stride
 
     if padding == 'same':
@@ -41,16 +46,21 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     else:
         h_p = w_p = 0
 
-    A_prev = np.pad(A_prev, ((0,), (h_p,), (w_p,), (0,)), mode='constant')
-    h_o = (h_i - h_k + 2 * h_p) // h_s + 1
-    w_o = (w_i - w_k + 2 * w_p) // w_s + 1
-    conv = np.zeros(shape=(m, h_o, w_o, c_o)) + b
-    for kern in range(c_o):
-        K = W[:, :, :, kern]
-        for row in range(h_o):
-            rows = slice(row * h_s, row * h_s + h_k)
-            for col in range(w_o):
-                cols = slice(col * w_s, col * w_s + w_k)
-                A = A_prev[:, rows, cols]
-                conv[:, row, col, kern] += np.sum(A * K, axis=(1, 2, 3))
-    return conv if activation is None else activation(conv)
+    padding = ((0,), (h_p,), (w_p,), (0,))
+    A_prev = np.pad(A_prev, padding, mode='constant')
+
+    h = (h_i - h_k + 2 * h_p) // h_s + 1
+    w = (w_i - w_k + 2 * w_p) // w_s + 1
+
+    Z = np.zeros(shape=(m, h, w, c)) + b
+
+    for row in range(h):
+        rows = slice(row * h_s, row * h_s + h_k)
+        for col in range(w):
+            cols = slice(col * w_s, col * w_s + w_k)
+            for kern in range(c):
+                K = W[:, :, :, kern]
+                X = A_prev[:, rows, cols]
+                Z[:, row, col, kern] += np.sum(K * X, axis=(1, 2, 3))
+
+    return Z if activation is None else activation(Z)
