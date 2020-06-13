@@ -50,6 +50,6 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
             cols = slice(col * w_s, col * w_s + w_k)
             A = A_prev[:, rows, cols]
             X = dA[:, row:row + 1, col:col + 1]
-            dA_prev[:, rows, cols] += A - X
+            dA_prev[:, rows, cols] += X - A
 
     return dA_prev
