@@ -37,7 +37,7 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
                 w_s is the width of the stride
     Return:
         the partial derivatives with respect to the previous layer (dX),
-        to the kernels (dK), and to the biases (db), respectively
+        to the kernels (dW), and to the biases (db), respectively
     """
     # pylint: disable=too-many-arguments,too-many-locals
 
@@ -52,12 +52,12 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     else:
         h_p = w_p = 0
 
+    pad_width = ((0, 0), (h_p, h_p), (w_p, w_p), (0, 0))
+    A_prev = np.pad(A_prev, pad_width, mode='constant')
+
     dX = np.zeros(A_prev.shape)
     dW = np.zeros(W.shape)
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
-
-    padding = ((0,), (h_p,), (w_p,), (0,))
-    A_prev = np.pad(A_prev, padding, mode='constant')
 
     for row in range(h):
         rows = slice(row * h_s, row * h_s + h_k)
@@ -67,6 +67,8 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
             for kern in range(c):
                 X = dZ[:, row, col, kern].reshape((-1, 1, 1, 1))
                 dX[:, rows, cols] += X * W[np.newaxis, ..., kern]
-                dW[:, :, :, kern] += np.sum(X * A, axis=0)
+                dW[:, :, :, kern] += np.sum(A * X, axis=0)
+
+    dX = dX[:, h_p:(-h_p or None), w_p:(-w_p or None)]
 
     return (dX, dW, db)
