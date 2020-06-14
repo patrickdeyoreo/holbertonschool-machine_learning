@@ -65,10 +65,9 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
             cols = slice(col * w_s, col * w_s + w_k)
             A = A_prev[:, rows, cols]
             for kern in range(c):
-                K = W[:, :, :, kern]
-                X = dZ[:, row:row + 1, col:col + 1, kern:kern + 1]
+                X = dZ[:, row:row+1, col:col+1, kern:kern+1]
+                dX[:, rows, cols] += W[:, :, :, kern] * np.sum(X)
                 dW[:, :, :, kern] += np.sum(X * A, axis=0)
                 db[:, :, :, kern] += np.sum(X)
-                dX[:, rows, cols] += K[np.newaxis, ...] * X
 
     return (dX, dW, db)
