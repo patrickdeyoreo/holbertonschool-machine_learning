@@ -41,10 +41,14 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     """
     # pylint: disable=too-many-arguments,too-many-locals
 
-    _, h, w, c = dZ.shape
+    m, h, w, c = dZ.shape
     _, h_i, w_i, _ = A_prev.shape
     h_k, w_k, _, _ = W.shape
     h_s, w_s = stride
+
+    dX = np.zeros(A_prev.shape)
+    dW = np.zeros(W.shape)
+    db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
 
     if padding == 'same':
         h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
@@ -52,23 +56,19 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     else:
         h_p = w_p = 0
 
-    pad_width = ((0, 0), (h_p, h_p), (w_p, w_p), (0, 0))
+    pad_width = ((0,), (h_p,), (w_p,), (0,))
     A_prev = np.pad(A_prev, pad_width, mode='constant')
 
-    dX = np.zeros(A_prev.shape)
-    dW = np.zeros(W.shape)
-    db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
-
-    for row in range(h):
-        rows = slice(row * h_s, row * h_s + h_k)
-        for col in range(w):
-            cols = slice(col * w_s, col * w_s + w_k)
-            A = A_prev[:, rows, cols]
-            for kern in range(c):
-                X = dZ[:, row, col, kern].reshape((-1, 1, 1, 1))
-                dX[:, rows, cols] += X * W[np.newaxis, ..., kern]
-                dW[:, :, :, kern] += np.sum(A * X, axis=0)
-
-    dX = dX[:, h_p:(-h_p or None), w_p:(-w_p or None)]
+    for kern in range(c):
+        K = W[..., kern]
+        for row in range(h):
+            rows = slice(row * h_s, row * h_s + h_k)
+            for col in range(w):
+                cols = slice(col * w_s, col * w_s + w_k)
+                for img in range(m):
+                    A = A_prev[img, rows, cols]
+                    X = dZ[img, row, col, kern]
+                    dX[img, rows, cols] += X * K
+                    dW[..., kern] += A * X
 
     return (dX, dW, db)
