@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Provides a function to perform forward propagation over a layer of a CNN."""
+"""Provides a function to do forward propagation over a convolutional layer."""
 # pylint: disable=invalid-name
 import numpy as np
 
 
 def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
     """
-    Perform forward prop over a convolutional layer of a neural network.
+    Perform forward propagation over a convolutional layer of a neural network.
 
     Arguments:
         A_prev: np.ndarray of shape (m, h_i, w_i, c_i) containing input, where

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Provides a function to perform back propagation over a layer of a CNN."""
+"""Provides a function to do back-propagation over a convolutional layer."""
 # pylint: disable=invalid-name
 import numpy as np
 
 
 def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     """
-    Perform back prop over a convolutional layer of a neural network.
+    Perform back-propagation over a convolutional layer of a neural network.
 
     Arguments:
         dZ: np.ndarray of shape (m, h, w, c) containing the partial

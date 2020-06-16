@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""
-Provides a function to perform forward propagation over a pooling layer
-of a neural network
-"""
+"""Provides a function to do forward propagation over a pooling layer."""
 # pylint: disable=invalid-name
 import numpy as np
 
 
 def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """
-    Performs forward prop over a pooling layer of a neural network
+    Perform forward propagation over a pooling layer of a neural network.
+
     Arguments:
         A_prev: np.ndarray of shape (m, h_i, w_i, c_i) containing input, where
                 m is the number of examples,

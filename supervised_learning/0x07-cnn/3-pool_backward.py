@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""
-Provides a function to perform back propagation over a convolutional layer
-of a neural network
-"""
+"""Provides a function to do back-propagation over a pooling layer."""
 # pylint: disable=invalid-name
 import numpy as np
 
 
 def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     """
-    Performs back prop over a convolutional layer of a neural network
+    Perform back-propagation over a pooling layer of a neural network.
+
     Arguments:
         dA: np.ndarray of shape (m, h, w, c) containing the partial
                 derivatives with respect to the pooled output, where
