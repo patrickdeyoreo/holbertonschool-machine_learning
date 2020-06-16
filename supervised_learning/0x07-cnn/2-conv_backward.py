@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""
-Provides a function to perform back propagation over a convolutional layer
-of a neural network
-"""
+"""Provides a function to perform back propagation over a layer of a CNN."""
 # pylint: disable=invalid-name
 import numpy as np
 
 
 def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     """
-    Performs back prop over a convolutional layer of a neural network
+    Perform back prop over a convolutional layer of a neural network.
+
     Arguments:
         dZ: np.ndarray of shape (m, h, w, c) containing the partial
                 derivatives with respect to the unactivated output, where
@@ -49,10 +47,11 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     if padding == 'same':
         h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
         w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
-        A_prev = np.pad(
-            A_prev, pad_width=((0,), (h_p,), (w_p,), (0,)), mode='constant')
     else:
         h_p = w_p = 0
+
+    A_prev = np.pad(
+        A_prev, pad_width=((0,), (h_p,), (w_p,), (0,)), mode='constant')
 
     dX = np.zeros(A_prev.shape)
     dW = np.zeros(W.shape)
