@@ -62,17 +62,17 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     for kern in range(c):
         K = W[..., kern]
         for row in range(h):
-            rows = slice(row * h_s + h_p, row * h_s + h_k + h_p)
+            rows = slice(row * h_s, row * h_s + h_k)
             for col in range(w):
-                cols = slice(col * w_s + w_p, col * w_s + w_k + w_p)
+                cols = slice(col * w_s, col * w_s + w_k)
                 A = A_prev[:, rows, cols]
                 X = dZ[:, row, col, kern].reshape(-1, 1, 1, 1)
                 dW[..., kern] += np.sum(A * X, axis=0)
                 dX[:, rows, cols] += X * K[np.newaxis, ...]
 
     if padding == 'same':
-        dX_rows = slice(None) if h_p == 0 else slice(h_p, -h_p)
-        dX_cols = slice(None) if w_p == 0 else slice(w_p, -w_p)
+        dX_rows = slice(None) if h_p == 0 else slice(0, -2 * h_p)
+        dX_cols = slice(None) if w_p == 0 else slice(0, -2 * w_p)
         dX = dX[:, dX_rows, dX_cols]
 
     return (dX, dW, db)
