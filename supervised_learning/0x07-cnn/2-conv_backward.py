@@ -45,13 +45,15 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     h_s, w_s = stride
 
     if padding == 'same':
-        h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
-        w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
+        h_p = int(np.ceil(((h_s * h_i) - h_s + h_k - h_i) / 2))
+        w_p = int(np.ceil(((w_s * w_i) - w_s + w_k - w_i) / 2))
+        # h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
+        # w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
+        A_prev = np.pad(A_prev,
+                        pad_width=((0, 0), (h_p, h_p), (w_p, w_p), (0, 0)),
+                        mode='constant')
     else:
         h_p = w_p = 0
-
-    A_prev = np.pad(
-        A_prev, pad_width=((0,), (h_p,), (w_p,), (0,)), mode='constant')
 
     dX = np.zeros(A_prev.shape)
     dW = np.zeros(W.shape)
@@ -69,9 +71,10 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
                     dX[img, rows, cols] += X * K
                     dW[..., kern] += A * X
 
-    dX_rows = slice(None) if h_p == 0 else slice(h_p, -h_p)
-    dX_cols = slice(None) if w_p == 0 else slice(w_p, -w_p)
-
-    dX = dX[:, dX_rows, dX_cols]
+    if padding == 'same':
+        dX = dX[:, h_p: dX.shape[1] - h_p, w_p: dX.shape[2] - w_p]
+        # dX_rows = slice(None) if h_p == 0 else slice(h_p, -h_p)
+        # dX_cols = slice(None) if w_p == 0 else slice(w_p, -w_p)
+        # dX = dX[:, dX_rows, dX_cols]
 
     return (dX, dW, db)
