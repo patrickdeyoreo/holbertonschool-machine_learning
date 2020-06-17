@@ -1,80 +1,71 @@
 #!/usr/bin/env python3
-"""Provides a function to do back-propagation over a convolutional layer."""
-# pylint: disable=invalid-name
+"""
+Backpropagation over Convolution Layer
+"""
 import numpy as np
 
 
-def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
-    """
-    Perform back-propagation over a convolutional layer of a neural network.
-
-    Arguments:
-        dZ: np.ndarray of shape (m, h, w, c) containing the partial
-                derivatives with respect to the unactivated output, where
-                m is the number of examples,
-                h is the height of the output,
-                w is the width of the output,
-                c is the number of channels in the output
-        A_prev: np.ndarray of shape (m, h_i, w_i, c_i) containing input, where
-                m is the number of examples,
-                h_i is the height of the previous layer,
-                w_i is the width of the previous layer,
-                c_i is the number of channels in the previous layer
-        W: np.ndarray of shape (h_k, w_k, c_i, c) containing kernels, where
-                h_k is the filter height,
-                w_k is the filter width,
-                c_i is the number of channels in the previous layer,
-                c is the number of channels in the output
-        b: np.ndarray of shape (1, 1, 1, c) containing biases, where
-                c is the number of channels in the output
-        padding: 'same' or 'valid', indicating the type of convolution, where
-                'same' specifies a same convolution,
-                'valid' specifies a valid convolution
-        stride: a tuple (h_s, w_s) specifying the stride size, where
-                h_s is the height of the stride,
-                w_s is the width of the stride
-    Return:
-        the partial derivatives with respect to the previous layer (dX),
-        to the kernels (dW), and to the biases (db), respectively
-    """
-    # pylint: disable=too-many-arguments,too-many-locals
-
-    m, h, w, c = dZ.shape
-    _, h_i, w_i, _ = A_prev.shape
-    h_k, w_k, _, _ = W.shape
-    h_s, w_s = stride
-
+def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
+    """function that performs a backpropagation over a convolutional layer"""
+    m = dZ.shape[0]
+    h_new = dZ.shape[1]
+    w_new = dZ.shape[2]
+    c_new = dZ.shape[3]
+    h_prev = A_prev.shape[1]
+    w_prev = A_prev.shape[2]
+    c_prev = A_prev.shape[3]
+    kh = W.shape[0]
+    kw = W.shape[1]
+    # image_num = np.arange(m)
+    sh = stride[0]
+    sw = stride[1]
+    if padding == 'valid':
+        ph = 0
+        pw = 0
+    elif padding == 'same':
+        # output size depends on filter size and must be equal to image size
+        # imposing constraints on padding for a given set of strides
+        ph = int(np.ceil(((sh * h_prev) - sh + kh - h_prev) / 2))
+        pw = int(np.ceil(((sw * w_prev) - sw + kw - w_prev) / 2))
     if padding == 'same':
-        h_p = int(np.ceil(((h_s * h_i) - h_s + h_k - h_i) / 2))
-        w_p = int(np.ceil(((w_s * w_i) - w_s + w_k - w_i) / 2))
-        # h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
-        # w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
-        A_prev = np.pad(A_prev,
-                        pad_width=((0, 0), (h_p, h_p), (w_p, w_p), (0, 0)),
+        # pad A_prev before convolution, padding always symmetric here
+        A_prev = np.pad(A_prev, pad_width=((0, 0), (ph, ph), (pw, pw), (0, 0)),
                         mode='constant')
-    else:
-        h_p = w_p = 0
-
-    dX = np.zeros(A_prev.shape)
-    dW = np.zeros(W.shape)
+    dA_prev = np.zeros(shape=A_prev.shape)
+    dW = np.zeros(shape=W.shape)
+    db = np.zeros(shape=b.shape)
+    for img_num in range(m):
+        for k in range(c_new):
+            for i in range(h_new):
+                for j in range(w_new):
+                    dA_prev[
+                        img_num,
+                        i * sh: i * sh + kh,
+                        j * sw: j * sw + kw,
+                        :
+                    ] += dZ[
+                        img_num,
+                        i,
+                        j,
+                        k
+                    ] * W[:, :, :, k]
+                    dW[:, :, :, k] += A_prev[
+                        img_num,
+                        i * sh: i * sh + kh,
+                        j * sw: j * sw + kw,
+                        :
+                    ] * dZ[
+                        img_num,
+                        i,
+                        j,
+                        k
+                    ]
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
-
-    for kern in range(c):
-        K = W[..., kern]
-        for row in range(h):
-            rows = slice(row * h_s, row * h_s + h_k)
-            for col in range(w):
-                cols = slice(col * w_s, col * w_s + w_k)
-                for img in range(m):
-                    A = A_prev[img, rows, cols]
-                    X = dZ[img, row, col, kern]
-                    dX[img, rows, cols] += X * K
-                    dW[..., kern] += A * X
-
     if padding == 'same':
-        dX = dX[:, h_p: dX.shape[1] - h_p, w_p: dX.shape[2] - w_p]
-        # dX_rows = slice(None) if h_p == 0 else slice(h_p, -h_p)
-        # dX_cols = slice(None) if w_p == 0 else slice(w_p, -w_p)
-        # dX = dX[:, dX_rows, dX_cols]
-
-    return (dX, dW, db)
+        dA_prev = dA_prev[
+            :,
+            ph: dA_prev.shape[1] - ph,
+            pw: dA_prev.shape[2] - pw,
+            :
+        ]
+    return dA_prev, dW, db
