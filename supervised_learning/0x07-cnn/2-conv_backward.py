@@ -58,7 +58,7 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
 
     for kern in range(c_o):
-        K = W[..., kern]
+        K = W[:, :, :, kern]
         for row in range(h_o):
             rows = slice(row * h_s, row * h_s + h_k)
             for col in range(w_o):
@@ -67,7 +67,7 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
                     A = A_prev[img, rows, cols]
                     X = dZ[img, row, col, kern]
                     dX[img, rows, cols] += X * K
-                    dW[..., kern] += A * X
+                    dW[:, :, :, kern] += A * X
 
     if padding == 'same':
         dX = dX[:, h_p: dX.shape[1] - h_p, w_p: dX.shape[2] - w_p]
