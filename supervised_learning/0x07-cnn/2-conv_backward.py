@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Provides a function to do back-propagation over a convolutional layer."""
+# pylint: disable=invalid-name
 import numpy as np
+
+# h_p = int(np.ceil(((h_s * h_i) - h_s + h_k - h_i) / 2))
+# w_p = int(np.ceil(((w_s * w_i) - w_s + w_k - w_i) / 2))
 
 
 def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
@@ -32,10 +36,11 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
         stride: a tuple (h_s, w_s) specifying the stride size, where
                 h_s is the height of the stride,
                 w_s is the width of the stride
-    Return:
+    Returns:
         the partial derivatives with respect to the previous layer (dX),
         to the kernels (dW), and to the biases (db), respectively
     """
+    # pylint: disable=too-many-arguments,too-many-locals,unused-argument
 
     m, h_o, w_o, c_o = dZ.shape
     _, h_i, w_i, _ = A_prev.shape
@@ -43,13 +48,10 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     h_s, w_s = stride
 
     if padding == 'same':
-        # h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
-        # w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
-        h_p = int(np.ceil(((h_s * h_i) - h_s + h_k - h_i) / 2))
-        w_p = int(np.ceil(((w_s * w_i) - w_s + w_k - w_i) / 2))
-        A_prev = np.pad(A_prev,
-                        pad_width=((0, 0), (h_p, h_p), (w_p, w_p), (0, 0)),
-                        mode='constant')
+        h_p = ((h_s - 1) * h_i - h_s + h_k + 1) // 2
+        w_p = ((w_s - 1) * w_i - w_s + w_k + 1) // 2
+        pad_width = ((0, 0), (h_p, h_p), (w_p, w_p), (0, 0))
+        A_prev = np.pad(A_prev, pad_width, mode='constant')
     else:
         h_p = w_p = 0
 
@@ -58,7 +60,7 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     db = np.sum(dZ, axis=(0, 1, 2), keepdims=True)
 
     for kern in range(c_o):
-        K = W[:, :, :, kern]
+        K = W[..., kern]
         for row in range(h_o):
             rows = slice(row * h_s, row * h_s + h_k)
             for col in range(w_o):
@@ -67,9 +69,11 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
                     A = A_prev[img, rows, cols]
                     X = dZ[img, row, col, kern]
                     dX[img, rows, cols] += X * K
-                    dW[:, :, :, kern] += A * X
+                    dW[..., kern] += A * X
 
     if padding == 'same':
-        dX = dX[:, h_p: dX.shape[1] - h_p, w_p: dX.shape[2] - w_p]
+        rows = slice(h_p, dX.shape[1] - h_p)
+        cols = slice(w_p, dX.shape[2] - w_p)
+        dX = dX[:, rows, cols, :]
 
     return (dX, dW, db)
