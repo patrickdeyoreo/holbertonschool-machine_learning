@@ -37,17 +37,17 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
     _, h, w, _ = dA.shape
     h_k, w_k = kernel_shape
     h_s, w_s = stride
-
-    f = np.max if mode == 'max' else np.mean
+    
+    mask = {'max': lambda A: np.where(A == np.max(A), 1, 0),
+            'avg': lambda A: np.ones(A.shape) / (h_k * w_k)}[mode]
     dX = np.zeros(A_prev.shape)
 
-    for row in range(h):
-        rows = slice(row * h_s, row * h_s + h_k)
-        for col in range(w):
-            cols = slice(col * w_s, col * w_s + w_k)
-            A = A_prev[:, rows, cols]
-            X = A - dA[:, row:row + 1, col:col + 1]
-            dX[:, rows, cols] += f(A, axis=(1, 2), keepdims=True)
-            dX[:, rows, cols] -= f(X, axis=(1, 2), keepdims=True)
-
+    for kern in range(c_o):
+        for row in range(h_o):
+            rows = slice(row * h_s, row * h_s + h_k)
+            for col in range(w_o
+                cols = slice(col * w_s, col * w_s + w_k)
+                for img in range(m):
+                    X = A_prev[img, rows, cols]
+                    dX[img, rows, cols] += mask(X) * dA
     return dX
