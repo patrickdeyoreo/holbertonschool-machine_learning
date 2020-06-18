@@ -74,6 +74,6 @@ def conv_backward(dZ, A_prev, W, b, padding='same', stride=(1, 1)):
     if padding == 'same':
         rows = slice(h_p, dX.shape[1] - h_p)
         cols = slice(w_p, dX.shape[2] - w_p)
-        dX = dX[:, rows, cols, :]
+        dX = dX[:, rows, cols]
 
     return (dX, dW, db)
