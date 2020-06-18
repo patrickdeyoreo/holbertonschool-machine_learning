@@ -10,25 +10,25 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
 
     Arguments:
         dA: np.ndarray of shape (m, h_o, w_o, c_o) containing the partial
-                derivatives with respect to the pooled output, where
-                m is the number of examples,
-                h_o is the height of the output,
-                w_o is the width of the output,
-                c_o is the number of channels in the output
+            derivatives with respect to the pooled output, where
+            m is the number of examples,
+            h_o is the height of the output,
+            w_o is the width of the output,
+            c_o is the number of channels in the output
         A_prev: np.ndarray of shape (m, h_i, w_i, c_i) containing input, where
-                m is the number of examples,
-                h_i is the height of the previous layer,
-                w_i is the width of the previous layer,
-                c_i is the number of channels in the previous layer
+            m is the number of examples,
+            h_i is the height of the previous layer,
+            w_i is the width of the previous layer,
+            c_i is the number of channels in the previous layer
         kernel_shape: a tuple (h_k, w_k) specifiying the kernel size, where
-                h_k is the filter height,
-                w_k is the filter width,
+            h_k is the filter height,
+            w_k is the filter width,
         stride: a tuple (h_s, w_s) specifying the stride size, where
-                h_s is the height of the stride,
-                w_s is the width of the stride
+            h_s is the height of the stride,
+            w_s is the width of the stride
         mode: either 'max' or 'avg', indicating the type of pooling, where
-                'max' specifies a max pooling,
-                'avg' specifies a average pooling
+            'max' specifies a max pooling,
+            'avg' specifies a average pooling
     Returns:
         the partial derivatives with respect to the previous layer (dX)
     """

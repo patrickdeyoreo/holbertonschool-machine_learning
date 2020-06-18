@@ -10,25 +10,25 @@ def conv_forward(A_prev, W, b, activation, padding='same', stride=(1, 1)):
 
     Arguments:
         A_prev: np.ndarray of shape (m, h_i, w_i, c_i) containing input, where
-                m is the number of examples,
-                h_i is the height of the previous layer,
-                w_i is the width of the previous layer,
-                c_i is the number of channels in the previous layer
+            m is the number of examples,
+            h_i is the height of the previous layer,
+            w_i is the width of the previous layer,
+            c_i is the number of channels in the previous layer
         W: np.ndarray of shape (h_k, w_k, c_i, c_o) containing kernels, where
-                h_k is the filter height,
-                w_k is the filter width,
-                c_i is the number of channels in the previous layer,
-                c_o is the number of channels in the output
+            h_k is the filter height,
+            w_k is the filter width,
+            c_i is the number of channels in the previous layer,
+            c_o is the number of channels in the output
         b: np.ndarray of shape (1, 1, 1, c_o) containing biases, where
-                c_o is the number of channels in the output
+            c_o is the number of channels in the output
         activation: an activation function to apply to the convolution, either
-                a callable object or None
+            a callable object or None
         padding: 'same' or 'valid', indicating the type of convolution, where
-                'same' specifies a same convolution,
-                'valid' specifies a valid convolution
+            'same' specifies a same convolution,
+            'valid' specifies a valid convolution
         stride: a tuple (h_s, w_s) specifying the stride size, where
-                h_s is the height of the stride,
-                w_s is the width of the stride
+            h_s is the height of the stride,
+            w_s is the width of the stride
     Returns:
         the output of the convolutional layer
     """
