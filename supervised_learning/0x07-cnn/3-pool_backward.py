@@ -47,14 +47,14 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
             """Mask for average pooling."""
             return np.ones_like(A) / (h_k * w_k)
 
-    dX = np.zeros(A_prev.shape)
+    dA_prev = np.zeros(A_prev.shape)
 
-    for kern in range(c_o):
-        for row in range(h_o):
-            rows = slice(row * h_s, row * h_s + h_k)
-            for col in range(w_o):
-                cols = slice(col * w_s, col * w_s + w_k)
-                for img in range(m):
-                    X = mask(A_prev[img, rows, cols, kern])
-                    dX[img, rows, cols, kern] += X * dA[img, row, col, kern]
-    return dX
+    for row in range(h_o):
+        rows = slice(row * h_s, row * h_s + h_k)
+        for col in range(w_o):
+            cols = slice(col * w_s, col * w_s + w_k)
+            for kern in range(c_o):
+                X = mask(A_prev[:, rows, cols, kern])
+                dX = X * dA[:, row, col, kern].reshape(-1, 1, 1)
+                dA_prev[:, rows, cols, kern] += dX
+    return dA_prev
