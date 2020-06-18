@@ -29,7 +29,7 @@ def pool_backward(dA, A_prev, kernel_shape, stride=(1, 1), mode='max'):
         mode: either 'max' or 'avg', indicating the type of pooling, where
                 'max' specifies a max pooling,
                 'avg' specifies a average pooling
-    Return:
+    Returns:
         the partial derivatives with respect to the previous layer (dX)
     """
     # pylint: disable=too-many-arguments,too-many-locals

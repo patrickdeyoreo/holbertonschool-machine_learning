@@ -23,7 +23,7 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
         mode: either 'max' or 'avg', indicating the type of pooling, where
                 'max' specifies a max pooling,
                 'avg' specifies a average pooling
-    Return:
+    Returns:
         the output of the pooling layer
     """
     # pylint: disable=too-many-arguments,too-many-locals
