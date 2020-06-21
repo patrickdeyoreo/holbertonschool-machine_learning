@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Provides an implementation of the LeNet-5 neural network in Keras."""
 # pylint: disable=invalid-name
+
 import tensorflow.keras as K
 
 
 def lenet5(X):
     """
-    Build the LeNet-5 neural network
+    Build the LeNet-5 network.
     """
     layers = (
         K.layers.Conv2D(
