@@ -28,34 +28,34 @@ def inception_block(A_prev, filters):
     layers = [
         K.layers.Conv2D(
             filters=filters[0], kernel_size=1, padding='same',
-            kernel_initializer=K.initializers.he_normal(),, activation='relu'
+            kernel_initializer=K.initializers.he_normal(), activation='relu'
         ),
         K.layers.Conv2D(
             filters=filters[1], kernel_size=1, padding='same',
-            kernel_initializer=K.initializers.he_normal(),, activation='relu'
+            kernel_initializer=K.initializers.he_normal(), activation='relu'
         ),
         K.layers.Conv2D(
             filters=filters[2], kernel_size=3, padding='same',
-            kernel_initializer=K.initializers.he_normal(),, activation='relu'
+            kernel_initializer=K.initializers.he_normal(), activation='relu'
         ),
         K.layers.Conv2D(
             filters=filters[3], kernel_size=1, padding='same',
-            kernel_initializer=K.initializers.he_normal(),, activation='relu'
+            kernel_initializer=K.initializers.he_normal(), activation='relu'
         ),
         K.layers.Conv2D(
             filters=filters[4], kernel_size=5, padding='same',
-            kernel_initializer=K.initializers.he_normal(),, activation='relu'
+            kernel_initializer=K.initializers.he_normal(), activation='relu'
         ),
         K.layers.MaxPool2D(
             pool_size=3, padding='same', strides=1
         ),
         K.layers.Conv2D(
             filters=filters[5], kernel_size=1, padding='same',
-            kernel_initializer=K.initializers.he_normal(),, activation='relu'
+            kernel_initializer=K.initializers.he_normal(), activation='relu'
         )
     ]
     output = [layers.pop()(A_prev)]
     while len(layers) > 0:
-        output.append(layers.pop(1)(A_prev)(layers.pop(0)(A_prev)))
+        output.append(layers.pop(1)(layers.pop(0)(A_prev)))
 
     return K.layers.concatenate(output)
