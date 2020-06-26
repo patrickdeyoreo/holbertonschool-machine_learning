@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
+"""Provides an implementation of an inception inception_block in Keras."""
+# pylint: disable=invalid-name
 
-from tensorflow import keras as K
+import tensorflow.keras as K
 
 
 def inception_block(A_prev, filters):
     """
     Build an inception block as described in "Going Deeper with Convolutions".
-
-    All convolutions inside the inception block use a ReLU.
 
     Arguments:
         A_prev (K.layers.Layer): the output of the previous layer
