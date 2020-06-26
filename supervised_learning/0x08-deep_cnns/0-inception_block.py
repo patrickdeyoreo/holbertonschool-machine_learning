@@ -52,9 +52,9 @@ def inception_block(A_prev, filters):
         K.layers.Conv2D(
             filters=filters[5], kernel_size=1, padding='same',
             kernel_initializer=K.initializers.he_normal(), activation='relu'
-        )
-    ]
-    output = [layers.pop()(A_prev)]
+        )]
+
+    output = layers.pop(0)(A_prev)
     while len(layers) > 0:
         output.append(layers.pop(1)(layers.pop(0)(A_prev)))
 
