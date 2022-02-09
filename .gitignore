@@ -1,0 +1,34 @@
+# temporary files
+*~
+*.sw[op]
+
+# python bytecode
+*.py[cod]
+
+# object files
+*.o
+*.so
+
+# tag files
+tags
+.tags
+
+# index files
+.DS_Store
+.vscode
+
+# ipython notebooks
+.ipynb_checkpoints/
+
+# model checkpoints
+*.ckpt
+*.ckpt.*
+
+# pickles
+*.pkl
+
+# npz
+*.npz
+
+# virtual environments
+venv/
