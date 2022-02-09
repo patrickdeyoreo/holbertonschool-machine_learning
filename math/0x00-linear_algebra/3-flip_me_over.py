@@ -7,6 +7,4 @@ def matrix_transpose(matrix: list) -> list:
     """
     Calculate the transpose of a matrix.
     """
-    if matrix is None:
-        return None
     return list(map(list, zip(*matrix)))
