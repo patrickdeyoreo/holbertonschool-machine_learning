@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 Provide a function to concatenate two numpy arrays along a specific axis.
 """
