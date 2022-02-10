@@ -3,6 +3,7 @@
 Provide a function to calculate the transpose of a matrix.
 """
 
+
 def matrix_transpose(matrix: list) -> list:
     """
     Calculate the transpose of a matrix.
