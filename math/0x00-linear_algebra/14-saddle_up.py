@@ -4,7 +4,7 @@ Provide a function to perform matrix multiplication of two numpy arrays.
 """
 
 
-def np_cat(mat1, mat2, axis=0):
+def np_matmul(mat1, mat2, axis=0):
     """
     Perform matrix multiplication of two numpy arrays.
     """
