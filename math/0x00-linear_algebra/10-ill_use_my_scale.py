@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Provide a function to calculates the shape of an array.
+Provide a function that calculates the shape of a numpy array.
 """
 
 def np_shape(matrix):
     """
-    Calculate the shape of an array.
+    Calculate the shape of a numpy array.
     """
     return matrix.shape
