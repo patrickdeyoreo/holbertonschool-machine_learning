@@ -17,7 +17,7 @@ def cat_matrices(mat1, mat2, axis=0):
 
 def cat_matrices_comp(mat1, mat2, axis):
     """
-    Perform a recursive comprehension to concatenate two n-dimensional matrices.
+    Perform a comprehension to concatenate two n-dimensional matrices.
     """
     if axis != 0:
         return [cat_matrices_comp(u, v, axis - 1) for u, v in zip(mat1, mat2)]
