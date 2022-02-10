@@ -10,5 +10,5 @@ def np_slice(matrix, axes={}):
     Slice a numpy array along specific axes.
     """
     slices = (slice(*axes.get(depth, (None, None)))
-                    for depth in range(len(matrix.shape)))
-    return matrix[tuple(slice)]
+              for depth in range(len(matrix.shape)))
+    return matrix[tuple(slices)]
