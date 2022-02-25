@@ -2,7 +2,6 @@
 """
 Provide a class Neuron that defines a neuron for binary classification.
 """
-from tempfile import gettempprefix
 import numpy as np
 
 
