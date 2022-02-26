@@ -13,7 +13,7 @@ class Neuron:
         """
         Initialize a neuron.
         Args:
-          nx (int): number of inputs to the neuron
+          nx (int): the number of inputs to the neuron
         Raises:
           TypeError: argument 'nx' is not an integer
           ValueError: argument 'nx' is less than 1
@@ -30,6 +30,8 @@ class Neuron:
     def W(self):
         """
         Get the weights vector of the neuron.
+        Returns:
+            (numpy.ndarray): the weights vector of the neuron
         """
         return self.__W
 
@@ -37,13 +39,17 @@ class Neuron:
     def b(self):
         """
         Get the bias of the neuron.
+        Returns:
+            (int): the bias the neuron
         """
         return self.__b
 
     @property
     def A(self):
         """
-        Get the activation of the neuron.
+        Get the activation state of the neuron.
+        Returns:
+            (Union[numpy.ndarray, int]): the activation state of the neuron
         """
         return self.__A
 
@@ -52,9 +58,13 @@ class Neuron:
         Compute forward propagation.
         Args:
             X (numpy.ndarray):
-                array with shape (nx, m) that contains the input data, where
-                nx is the number of input features to the neuron, and m is the
+                array with shape (nx, m) containing the input data, where nx
+                is the number of input features to the neuron, and m is the
                 number of samples
+        Returns:
+            (numpy.ndarray):
+                array of shape (1, m) containing the activation state of the
+                neuron for each sample, where m is the number of samples
         """
         self.__A = self.sigmoid(self.__W @ X + self.__b)
         return self.__A
@@ -65,7 +75,11 @@ class Neuron:
         Compute the sigmoid activation.
         Args:
             X (numpy.ndarray):
-                array of shape (1, m) that contains the dot product of the
+                array of shape (1, m) containing the cross product of the
                 weights and the input data, where m is the number of samples
+        Returns:
+            (numpy.ndarray):
+                array of shape (1, m) containing the activation state of the
+                neuron for each sample, where m is the number of samples
         """
         return (1 + np.exp(-X)) ** (-1)
