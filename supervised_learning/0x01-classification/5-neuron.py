@@ -63,11 +63,12 @@ class Neuron:
                 of examples
             Y (numpy.ndarray):
                 array with shape (1, m) that contains the correct labels for
-                the input data
+                the input data, where m is the number of examples
         Returns:
             (numpy.ndarray):
                 the neuron's prediction as an array with shape (1, m)
-                containing the predicted labels for each example
+                containing the predicted labels for each example, where m is
+                the number of examples
             (float):
                 the cost of the model
         """
@@ -91,6 +92,30 @@ class Neuron:
         """
         self.__A = self.sigmoid(self.__W @ X + self.__b)
         return self.__A
+
+    def gradient_descent(self, X, Y, A, alpha=0.05):
+        """
+        Compute one pass of gradient descent on the neuron.
+        Args:
+            X (numpy.ndarray):
+                array with shape (nx, m) containing the input data, where nx is
+                the number of input features to the neuron, and m is the number
+                of examples
+            Y (numpy.ndarray):
+                array with shape (1, m) that contains the correct labels for
+                the input data, where m is the number of examples
+            A (numpy.ndarray):
+                array of shape (1, m) containing the activation state of the
+                neuron for each example, where m is the number of examples
+            alpha (float):
+                the learning rate
+        """
+        m = X.shape[1]
+        dZ = A - Y
+        dW = (X @ dZ.T) / m
+        db = np.sum(dZ) / m
+        self.__W -= (alpha * dW).T
+        self.__b -= (alpha * db).T
 
     @staticmethod
     def cost(Y, A):
