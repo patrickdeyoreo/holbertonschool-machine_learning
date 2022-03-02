@@ -26,7 +26,7 @@ class NeuralNetwork:
             argument 'nx' is less than 1, or argument 'nodes' is less than 1
         """
         self.W1 = np.random.randn(nodes, nx)
-        self.b1 = 0
+        self.b1 = np.zeros((nodes, 1))
         self.A1 = 0
         self.W2 = np.random.randn(1, nodes)
         self.b2 = 0
