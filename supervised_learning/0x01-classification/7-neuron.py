@@ -2,6 +2,7 @@
 """
 Provide a class Neuron that defines a neuron for binary classification.
 """
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -117,7 +118,10 @@ class Neuron:
         self.__W -= (alpha * dW).T
         self.__b -= (alpha * db).T
 
-    def train(self, X, Y, iterations=5000, alpha=0.05):
+    def train(
+        self, X, Y, iterations=5000, alpha=0.05, verbose=True, graph=True,
+        step=100
+    ):
         """
         Train the neuron.
         Arguments:
@@ -134,11 +138,12 @@ class Neuron:
                 the learning rate
         Raises:
           TypeError:
-            argument 'iterations' is not an integer or argument 'alpha' is not
-            a float
+            argument 'iterations' is not an integer, or argument 'alpha' is not
+            a float, or argument 'step' is not an integer
           ValueError:
-            argument 'iterations' is less than 1 or argument 'alpha' is less
-            than 1
+            argument 'iterations' is less than 1, or argument 'alpha' is less
+            than 1, or argument 'step' is less than 1 or greater than
+            'iterations'
         Returns:
             (numpy.ndarray):
                 the neuron's prediction as an array with shape (1, m)
@@ -155,10 +160,35 @@ class Neuron:
             raise TypeError("alpha must be a float")
         if alpha <= 0:
             raise ValueError("alpha must be positive")
-        while iterations > 0:
+        if verbose or graph:
+            if isinstance(step, int) is False:
+                raise TypeError("step must be an integer")
+            if not 1 <= step <= iterations:
+                raise ValueError("step must be positive and <= iterations")
+            _, cost = self.evaluate(X, Y)
+            if verbose:
+                print("Cost after", 0, "iterations:", cost)
+            if graph:
+                x = [0]
+                y = [cost]
+        iteration = 0
+        while iteration < iterations:
             A = self.forward_prop(X)
             self.gradient_descent(X, Y, A, alpha)
-            iterations -= 1
+            iteration += 1
+            if iteration % step == step or iteration == iterations:
+                if verbose or graph:
+                    cost = self.evaluate(X, Y)[1]
+                    if verbose:
+                        print("Cost after", iteration, "iterations:", cost)
+                    if graph:
+                        x.append(iteration)
+                        y.append(cost)
+        if graph:
+            plt.title("Training Cost")
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
+            plt.plot(x, y)
         return self.evaluate(X, Y)
 
     @staticmethod
